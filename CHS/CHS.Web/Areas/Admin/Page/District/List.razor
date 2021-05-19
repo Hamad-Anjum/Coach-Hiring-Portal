@@ -1,0 +1,167 @@
+﻿@page "/District"
+@page "/Admin/Home"
+
+@if (_districts == null)
+{
+    <Loader />
+}
+else
+{
+    <div class="container mt-0">
+        <MatTable Id="matTbl" Items="_districts.OrderByDescending(x => x.Name)" LoadInitialData="true" PageLabel="Pages"
+                  PageRecordCountLabel="Records" SearchTermFieldPlaceHolder="Type" SearchTermFieldLabel="Search"
+                  ApiUrl="@($"{Constant.ApiUrl}Districts")" RequestApiOnlyOnce="true" AllowSelection="true"
+                  DebounceMilliseconds="0" PageSizes="ListPageSizeStructure.GetPageSizeStructures()" PageSize="4"
+                  FilterByColumnName="Name" UseSortHeaderRow="true" Class="table table-striped table-hover">
+            <MatTableHeader>
+                <MatSortHeaderRow>
+                    <MatSortHeader>District</MatSortHeader>
+                    <MatSortHeader>City</MatSortHeader>
+                    <MatSortHeader>State</MatSortHeader>
+                    <MatSortHeader>Country</MatSortHeader>
+                    <MatSortHeader>Status</MatSortHeader>
+                    <MatSortHeader></MatSortHeader>
+                </MatSortHeaderRow>
+            </MatTableHeader>
+            <MatTableRow>
+                @if (_districts.Count == 0)
+                    {
+                    <td>
+                        <MatH6 Style="font-weight:400">No Districts Were Found</MatH6>
+                    </td>
+                    }
+                    else
+                    {
+                    <td>@context.Name</td>
+                    <td>@context.CityName</td>
+                    <td>@context.StateName</td>
+                    <td>@context.CountryName</td>
+                    <td>@context.Status</td>
+                    <td>
+                        @if (context.Status.Equals("Active"))
+                            {
+                            <MatIconButton Icon="@MatIconNames.Delete" title="Active This" Style="color:#e42436" OnClick="@(()=>ActiveToggle(context.Id))"></MatIconButton>
+                            }
+                            else
+                            {
+                            <MatIconButton Icon="@MatIconNames.Check" title="In Active This" Style="color:#24e438" OnClick="@(()=>ActiveToggle(context.Id))"></MatIconButton>
+                            }
+                    </td>
+                    }
+            </MatTableRow>
+        </MatTable>
+    </div>
+}
+
+
+@if (_countryStateCityDistrict != null)
+    if (_countryStateCityDistrict.Countries != null)
+    {
+        if (_countryStateCityDistrict.Countries.Count > 0 && _countryStateCityDistrict.StatesCount > 0
+            && _countryStateCityDistrict.CitiesCount > 0)
+        {
+            <EditForm Model="_model" OnValidSubmit="AddNewDistrict">
+                <MatH5 Class="mx-4">Add City</MatH5>
+                <div class="row container">
+                    <div class="col-md-6 col-sm-12">
+                        <MatSelect Value="_model.CountryId"
+                                   ValueExpression="@(() => _model.CountryId)"
+                                   ValueChanged="(Guid e)=>SetCountry(e)"
+                                   @onfocusout="() => SetCountry(_model.CountryId)"
+                                   Outlined="true" Icon="@MatIconNames.Flag" Label="Country">
+                            @if (_countries != null)
+                            {
+                                foreach (var item in _countries)
+                                {
+                                    <MatOption TValue="Guid" Value="item.Id">@item.Name</MatOption>
+                                }
+                            }
+                        </MatSelect>
+                        @if (!string.IsNullOrEmpty(_countryMessage))
+                        {
+                            <span class="text-danger">@_countryMessage</span>
+                        }
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <MatSelect Value="_model.StateId"
+                                   ValueExpression="@(()=>_model.StateId)"
+                                   ValueChanged="(Guid e)=>SetState(e)"
+                                   @onfocusout="()=>SetState(_model.StateId)"
+                                   Outlined="true" Icon="@MatIconNames.Outlined_flag" Label="State">
+                            @if (_states != null)
+                            {
+                                foreach (var item in _states)
+                                {
+                                    <MatOption TValue="Guid" Value="item.StateId">@item.StateName</MatOption>
+                                }
+                            }
+                        </MatSelect>
+                        @if (!string.IsNullOrEmpty(_stateMessage))
+                        {
+                            <span class="text-danger">@_stateMessage</span>
+                        }
+                    </div>
+                    <div class="col-md-6 col-sm-12 mt-3">
+                        <MatSelect Value="_model.CityId"
+                                   ValueExpression="@(() => _model.CityId)"
+                                   ValueChanged="(Guid e)=>SetCity(e)"
+                                   @onfocusout="()=>SetCity(_model.CityId)"
+                                   Outlined="true" Icon="@MatIconNames.Location_city" Label="City">
+                            @if (_cities != null)
+                            {
+                                foreach (var item in _cities)
+                                {
+                                    <MatOption TValue="Guid" Value="item.Id">@item.CityName</MatOption>
+                                }
+                            }
+                        </MatSelect>
+                        @if (!string.IsNullOrEmpty(_cityMessage))
+                        {
+                            <span class="text-danger">@_cityMessage</span>
+                        }
+                    </div>
+                    <div class="col-md-6 col-sm-12 mt-3">
+                        <MatTextField Type="text" @bind-Value="@_model.Name" Required="true"
+                                      OnInput="@((e) => SetDistrict(e.Value.ToString()))"
+                                      Style="width:100%" Outlined="true" Icon="@MatIconNames.Location_city" Label="District">
+                            <MatIconButton type="submit" Style="color:#6200EE" Icon="@MatIconNames.Add"></MatIconButton>
+                        </MatTextField>
+                        <ValidationMessage For="@(() => _model.CityName)" class="text-danger" />
+                    </div>
+                </div>
+            </EditForm>
+        }
+        else if (_countryStateCityDistrict.CitiesCount == 0)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <MatH5 Class="mx-3">
+                        First, Add Some Cities
+                        <MatButtonLink Href="City" TrailingIcon="@MatIconNames.Arrow_downward">Cities</MatButtonLink>
+                    </MatH5>
+                </div>
+            </div>
+        }
+        else if (_countryStateCityDistrict.StatesCount == 0)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <MatH5 Class="mx-3">
+                        First, Add Some States
+                        <MatButtonLink Href="State" TrailingIcon="@MatIconNames.Arrow_downward">State</MatButtonLink>
+                    </MatH5>
+                </div>
+            </div>
+        }
+        else if (_countryStateCityDistrict.Countries.Count == 0)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <MatH5 Class="mx-3">
+                        First, Add Some Countries
+                        <MatButtonLink Href="Country" TrailingIcon="@MatIconNames.Arrow_downward">Country</MatButtonLink>
+                    </MatH5>
+                </div>
+            </div>
+        }
+    }

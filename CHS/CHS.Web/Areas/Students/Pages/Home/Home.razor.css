@@ -1,0 +1,85 @@
+﻿
+div.container-fluid > div.row div div.card div.card-body:hover {
+    cursor:pointer;
+}
+
+
+@media screen and (max-width:800px){
+
+    div.media.align-items-center span.p-3{
+        padding:8px !important;
+        border-radius:1rem !important;
+    }
+
+    div.media.align-items-center span svg.svg-icon {
+        padding: 5px !important;
+    }
+
+    div.media-body.text-right p.fs-18.text-white.mb-2{
+        font-size:14px !important;
+    }
+
+    div.card a div.card-body {
+        padding: 1rem !important;
+    }
+
+    div.media-body.text-right span.fs-48.text-white.font-w600 {
+        font-size:35px !important;
+    }
+}
+
+@media screen and (max-width:550px){
+
+    .container-fluid .row .card {
+        border-radius: 12px !important;
+    }
+
+    div.media.align-items-center span.p-3 {
+        padding: 0 !important;
+        border-radius: 12px !important;
+    }
+
+    div.media.align-items-center span svg.svg-icon {
+        padding: 10px !important;
+    }
+
+    div.media-body.text-right p.fs-18.text-white.mb-2{
+        font-size:12px !important;
+    }
+
+    div.card a div.card-body {
+        padding: 0.6rem !important;
+    }
+
+    div.media-body.text-right span.fs-48.text-white.font-w600 {
+        font-size:24px !important;
+    }
+}
+
+@media screen and (max-width:400px){
+
+    .container-fluid .row .card {
+        border-radius: 9px !important;
+    }
+
+    div.media.align-items-center span.p-3 {
+        padding: 0 !important;
+        border-radius: 9px !important;
+    }
+
+    div.media.align-items-center span svg.svg-icon {
+        padding: 11px !important;
+    }
+
+    div.media-body.text-right p.fs-18.text-white.mb-2{
+        font-size:10px !important;
+    }
+
+    div.card a div.card-body {
+        padding: 0.4rem !important;
+    }
+
+    div.media-body.text-right span.fs-48.text-white.font-w600 {
+        font-size:20px !important;
+    }
+}

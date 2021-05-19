@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "twitter-bootstrap@5.0.0-beta1",
+      "destination": "wwwroot/libs/bootstrap/"
+    },
+    {
+      "library": "animate.css@4.1.1",
+      "destination": "wwwroot/libs/animate.css/"
+    },
+    {
+      "library": "jquery@3.5.1",
+      "destination": "wwwroot/libs/jquery/"
+    },
+    {
+      "library": "font-awesome@5.15.1",
+      "destination": "wwwroot/libs/font-awesome/"
+    },
+    {
+      "library": "materialize@1.0.0",
+      "destination": "wwwroot/libs/materialize/"
+    }
+  ]
+}

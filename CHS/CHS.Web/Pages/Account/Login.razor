@@ -1,0 +1,72 @@
+﻿@layout LoginLayout
+@page "/Login"
+@page "/Login/{returnUrl}"
+
+<div class="authincation h-100" style="background-image: url('Images/bg-01.jpg');">
+    <div class="h-100 mycontainer" style="background-color: rgba(255,255,255,0.8);">
+        @if (_disable || _processing)
+        {
+            <div class="container text-center">
+                <h4 class="text-center">Processing...</h4>
+                <LoginProcess />
+            </div>
+        }
+        else
+        {
+            <div class="row justify-content-center h-100 align-items-center">
+                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-9">
+
+                    <div class="authincation-content">
+                        <div class="row no-gutters">
+                            <div class="col-xl-12 col-sm-11">
+                                <div class="auth-form">
+                                    <div class="text-center mb-3">
+                                        <a href="index.html"><img src="Jobie/images/logo-full.png" alt=""></a>
+                                    </div>
+                                    <h4 class="text-center mb-4 text-white">Sign in your account</h4>
+                                    <EditForm Model="_login" OnValidSubmit="HandleValidSubmit">
+                                        <div class="text-danger">
+                                            <DataAnnotationsValidator />
+                                            <ValidationSummary />
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(_message))
+                                        {
+                                            <span class="text-danger">@_message</span>
+                                        }
+                                        <div class="form-group">
+                                            <label class="mb-1 text-white"><strong>Email</strong></label>
+                                            <InputText @bind-Value="_login.Email" class="form-control" placeholder="hello@example.com"></InputText>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="mb-1 text-white"><strong>Password</strong></label>
+                                            <InputText type="password" @bind-Value="_login.Password" class="form-control"></InputText>
+                                        </div>
+                                        <div class="form-row d-flex justify-content-between mt-4 mb-2">
+                                            <div class="form-group">
+                                                <div class="custom-control custom-checkbox ml-1 text-white">
+                                                    <InputCheckbox @bind-Value="_login.RememberMe" class="custom-control-input" id="basic_checkbox_1"></InputCheckbox>
+                                                    <label class="custom-control-label" for="basic_checkbox_1">Remember my preference</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <a class="text-white" href="#">Forgot Password?</a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn bg-white text-primary btn-block">Sign Me In</button>
+                                        </div>
+                                    </EditForm>
+                                    <div class="new-account mt-3">
+                                        <p class="text-white">Don't have an account? <a class="text-white" href="Register">Sign up</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+

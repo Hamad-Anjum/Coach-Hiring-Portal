@@ -1,0 +1,103 @@
+﻿@page "/State"
+
+@if (_states == null)
+{
+    <Loader />
+}
+else
+{
+    <div class="container mt-0">
+        <MatTable Id="matTbl" Items="_states.OrderByDescending(x => x.StateName)" LoadInitialData="true" PageLabel="Pages"
+                  PageRecordCountLabel="Records" SearchTermFieldPlaceHolder="Type" SearchTermFieldLabel="Search"
+                  ApiUrl="@($"{Constant.ApiUrl}States")" RequestApiOnlyOnce="true" AllowSelection="true"
+                  DebounceMilliseconds="0" PageSizes="ListPageSizeStructure.GetPageSizeStructures()" PageSize="4"
+                  FilterByColumnName="Name" UseSortHeaderRow="true" Class="table table-striped table-hover">
+            <MatTableHeader>
+                <MatSortHeaderRow>
+                    <MatSortHeader>Name</MatSortHeader>
+                    <MatSortHeader>Country</MatSortHeader>
+                    <MatSortHeader>Status</MatSortHeader>
+                    <MatSortHeader></MatSortHeader>
+                </MatSortHeaderRow>
+            </MatTableHeader>
+            <MatTableRow>
+                @if (_states.Count == 0)
+                    {
+                    <MatH6 Style="font-weight:400">No States Were Found</MatH6>
+                    }
+                    else
+                    {
+                    <td>@context.StateName</td>
+                    <td>@context.CountryName</td>
+                    <td>@context.Status</td>
+                    <td>
+                        @if (context.Status.Equals("Active"))
+                            {
+                            <MatIconButton Icon="@MatIconNames.Delete" title="Active This" Style="color:#e42436" OnClick="@(()=>Delete(context.StateId))"></MatIconButton>
+                            }
+                            else
+                            {
+                            <MatIconButton Icon="@MatIconNames.Check" title="In Active This" Style="color:#24e438" OnClick="@(()=>Delete(context.StateId))"></MatIconButton>
+                            }
+                    </td>
+                    }
+            </MatTableRow>
+        </MatTable>
+    </div>
+}
+
+@if (_countries != null)
+{
+    if (_countries.Count == 0)
+    {
+        <div class="row">
+            <div class="col-12">
+                <MatH5 Class="mx-3">
+                    First, Add Some Countries
+                    <MatButtonLink Href="Country" TrailingIcon="@MatIconNames.Arrow_downward">Here</MatButtonLink>
+                </MatH5>
+            </div>
+        </div>
+    }
+    else
+    {
+        <EditForm Model="_model" OnValidSubmit="AddNewState">
+            <DataAnnotationsValidator />
+            <MatH5 Class="mx-4">Add State</MatH5>
+            <div class="row container">
+                <div class="col-md-6 col-sm-12">
+                    <MatSelect Value="_model.CountryId"
+                               ValueExpression="@(()=>_model.CountryId)"
+                               ValueChanged="(Guid e)=>SetCountry(e)"
+                               Outlined="true" Icon="@MatIconNames.Location_city" @onfocusout="()=>SetCountry(_model.CountryId)" Label="Country">
+                        @if (_countries != null)
+                        {
+                            foreach (var item in _countries)
+                            {
+                                <MatOption TValue="Guid" Value="item.Id">@item.Name</MatOption>
+                            }
+                        }
+                    </MatSelect>
+                    <ValidationMessage For="@(()=>_model.CountryId)" class="text-danger" />
+                    @if (!string.IsNullOrEmpty(_countryMessage))
+                    {
+                        <span class="text-danger">@_countryMessage</span>
+                    }
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <MatTextField Type="text" Required="true"
+                                  @bind-Value="_model.StateName"
+                                  OnInput="(e)=>SetState(e.Value.ToString())"
+                                  Style="width:100%" Outlined="true" Icon="@MatIconNames.Outlined_flag" Label="State">
+                        <MatIconButton type="submit" Style="color:#6200EE" Icon="@MatIconNames.Add"></MatIconButton>
+                    </MatTextField>
+                    <ValidationMessage For="@(()=>_model.StateName)" class="text-danger" />
+                    @if (!string.IsNullOrEmpty(_stateMessage))
+                    {
+                        <span class="text-danger">@_stateMessage</span>
+                    }
+                </div>
+            </div>
+        </EditForm>
+    }
+}

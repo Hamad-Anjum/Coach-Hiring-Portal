@@ -1,0 +1,24 @@
+﻿@page "/"
+@attribute [Authorize(Policy = "FilledSurveyForm")]
+
+@code{
+    [Inject]
+    public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        if (user.User.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo(user.User.IsInRole("Admin") ? "Admin/Home" : user.User.IsInRole("Student") || user.User.IsInRole("Gym") || user.User.IsInRole("Trainer") ? "Home" : "Login");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("Login");
+        }
+    }
+}

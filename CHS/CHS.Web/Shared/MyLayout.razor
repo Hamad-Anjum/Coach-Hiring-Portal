@@ -1,0 +1,43 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+
+<AuthorizeView>
+    <Authorized Context="chs">
+        <AuthorizeView Roles="Gym,Student,Trainer" Context="context">
+            <Authorized>
+                <AuthorizeView Policy="FilledSurveyForm">
+                    <Authorized Context="an">
+                        @{
+                            NavigationManager.NavigateTo("/Home");
+                        }
+                    </Authorized>
+                    <NotAuthorized Context="an">
+                        <RedirectToSurveyForm />
+                    </NotAuthorized>
+                </AuthorizeView>
+            </Authorized>
+        </AuthorizeView>
+        @*<AuthorizeView Roles="Trainer">
+                @{
+                    NavigationManager.NavigateTo("/Home-t");
+                }
+            </AuthorizeView>
+            <AuthorizeView Roles="Student">
+                @{
+                    NavigationManager.NavigateTo("/Home-s");
+                }
+            </AuthorizeView>*@
+        <AuthorizeView Roles="Admin" Context="c">
+            <Authorized>
+                @{
+                    NavigationManager.NavigateTo("/Admin/Home");
+                }
+            </Authorized>
+        </AuthorizeView>
+    </Authorized>
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+</AuthorizeView>
+
+@Body

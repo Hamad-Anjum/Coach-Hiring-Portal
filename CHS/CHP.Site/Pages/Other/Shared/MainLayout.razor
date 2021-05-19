@@ -1,0 +1,19 @@
+﻿@inherits LayoutComponentBase
+
+<Header />
+
+@Body
+
+<Footer />
+
+@code{
+
+    [Inject]
+    public IJSRuntime JSRuntime { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("window.rxLazy");
+        await JSRuntime.InvokeVoidAsync("window.Script");
+    }
+}

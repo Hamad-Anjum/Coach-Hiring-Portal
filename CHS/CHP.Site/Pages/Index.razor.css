@@ -1,0 +1,48 @@
+﻿
+.btn-custom {
+    font-size: 16px;
+    padding: 11px 40px 10px;
+    border: 2px solid #40189D;
+    background-color: #40189D;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    height: 50px;
+    display: inline-block;
+    transition: .25s ease-in;
+    color: #fff;
+    transition: all 0.6s ease;
+}
+
+button.btn-info:hover {
+    border-radius:10px;
+}
+
+.btn-custom:hover {
+    background-color: #fff;
+    color: #40189D;
+    transition:all 0.6s ease;
+}
+
+div.fitness-program-item-back a.fitness-program-item-inner {
+    background-color:transparent;
+    border-radius:10px;
+}
+
+div.fitness-program-item-back a.fitness-program-item-inner > div {
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background: #40189d9c;
+    letter-spacing: 0.1rem;
+}
+
+div.fitness-program-item-back a.fitness-program-item-inner h3 {
+    width: 100%;
+    background: #40189d7a;
+    border-radius: 10px;
+    letter-spacing: 0.2rem;
+}
+
+

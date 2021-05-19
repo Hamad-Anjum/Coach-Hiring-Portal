@@ -1,0 +1,77 @@
+﻿<!-- ================== FOOTER ================== -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-lg-3 footer-item-logo">
+                <a href="index.html" class="logo-footer"><img src="assets/img/footer-logo2.svg" alt="logo"></a>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</p>
+                <ul class="social-list">
+                    <li><a target="_blank" href="https://www.facebook.com/rovadex"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                    <li><a target="_blank" href="https://twitter.com/RovadexStudio"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                    <li><a target="_blank" href="https://www.youtube.com"><i class="fa fa-youtube" aria-hidden="true"></i></a></li>
+                    <li><a target="_blank" href="https://www.instagram.com/rovadex"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                </ul>
+            </div>
+            <div class="col-sm-6 col-lg-3 footer-item footer-item-list">
+                <h3>Links</h3>
+                <ul class="footer-link">
+                    <li><a href="#">Sed ut perspiciatis unde</a></li>
+                    <li><a href="#">Omnis iste natus error sit</a></li>
+                    <li><a href="#">Voluptatem accusantium</a></li>
+                    <li><a href="#">Doloremque laudantium</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-6 col-lg-3 footer-item">
+                <h3>Contact us</h3>
+                <ul class="footer-cont">
+                    <li><i class="fa fa-phone" aria-hidden="true"></i><a href="tel:18004886040">1-800-488-6040</a></li>
+                    <li><i class="fa fa-envelope" aria-hidden="true"></i><a href="mailto:crossFit@gmail.com">CrossFit@gmail.com</a></li>
+                    <li><i class="fa fa-map-marker" aria-hidden="true"></i><a href="contacts.html">London,Street 225r.21</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-6 col-lg-3 footer-item">
+                <h3>Blog</h3>
+                <ul class="footer-blog">
+                    <li>
+                        <a href="blog.html" class="img-cover"><img src="assets/img/footer-icon-1.jpg" alt="img"></a>
+                        <div class="footer-blog-info">
+                            <div class="name"><a href="blog.html">Sed ut perspiciatis</a></div>
+                            <p>Omnis iste natus error sit voluptatem…</p>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="blog.html" class="img-cover"><img src="assets/img/footer-icon-2.jpg" alt="img"></a>
+                        <div class="footer-blog-info">
+                            <div class="name"><a href="blog.html">Sed ut perspiciatis</a></div>
+                            <p>Omnis iste natus error sit voluptatem…</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="copyright"><a href="#" target="_blank">Rovadex</a> © 2019. Fitmax. All Rights Reserved.</div>
+            <ul class="footer-menu">
+                <li><a href="index.html">Home</a></li>
+                <li class="active"><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="blog.html">News</a></li>
+                <li><a href="contacts.html">Contacts</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<!-- ================ FOOTER END ================ -->
+
+@code {
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    private string _classes = string.Empty;
+    protected override void OnInitialized()
+    {
+        _classes = NavigationManager.Uri.Split(Constant.SiteUrl)[1];
+
+    }
+}

@@ -1,0 +1,67 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ViewModels\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
+    <None Remove="ViewModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="ViewModels\AboutMeViewModel.cs" />
+    <Compile Include="ViewModels\CertificationViewModel.cs" />
+    <Compile Include="ViewModels\CityViewModel.cs" />
+    <Compile Include="ViewModels\CompleteCourseViewModel.cs" />
+    <Compile Include="ViewModels\Constant.cs" />
+    <Compile Include="ViewModels\ContactViewModel.cs" />
+    <Compile Include="ViewModels\DistrictViewModel.cs" />
+    <Compile Include="ViewModels\FollowViewModel.cs" />
+    <Compile Include="ViewModels\GenderViewModel.cs" />
+    <Compile Include="ViewModels\GymHistoryViewModel.cs" />
+    <Compile Include="ViewModels\HomeViewModel.cs" />
+    <Compile Include="ViewModels\LanguageViewModel.cs" />
+    <Compile Include="ViewModels\LikePostViewModel.cs" />
+    <Compile Include="ViewModels\MemberSkillViewModel.cs" />
+    <Compile Include="ViewModels\MemberSubscriptionViewModel.cs" />
+    <Compile Include="ViewModels\PersonalInfoViewModel.cs" />
+    <Compile Include="ViewModels\PostImageViewModel.cs" />
+    <Compile Include="ViewModels\PostUploadViewModel.cs" />
+    <Compile Include="ViewModels\PostViewModel.cs" />
+    <Compile Include="ViewModels\PreferredLocationViewModel.cs" />
+    <Compile Include="ViewModels\ProfileViewModel.cs" />
+    <Compile Include="ViewModels\SiteViewModel.cs" />
+    <Compile Include="ViewModels\SkillMemberViewModel.cs" />
+    <Compile Include="ViewModels\SkillViewModel.cs" />
+    <Compile Include="ViewModels\StudentHistoryViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\MemberGymsViewModel.cs" />
+    <Compile Include="ViewModels\MemberTrainersViewModel.cs" />
+    <Compile Include="ViewModels\BasicInfoViewModel.cs" />
+    <Compile Include="ViewModels\QuestionnaireViewModel.cs" />
+    <Compile Include="ViewModels\RefreshToken.cs" />
+    <Compile Include="ViewModels\RefreshViewModel.cs" />
+    <Compile Include="ViewModels\RegisterViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
+    <Compile Include="ViewModels\MemberStudentsViewModel.cs" />
+    <Compile Include="ViewModels\SubscriptionViewModel.cs" />
+    <Compile Include="ViewModels\SurveyGetViewModel.cs" />
+    <Compile Include="ViewModels\SurveyPostViewModel.cs" />
+    <Compile Include="ViewModels\TimeSlotViewModel.cs" />
+    <Compile Include="ViewModels\TrainerComfortZoneViewModel.cs" />
+    <Compile Include="ViewModels\TrainerHistoryViewModel.cs" />
+    <Compile Include="ViewModels\UserWithToken.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation" Version="3.2.0-rc1.20223.4" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CHS.Domains\CHS.Domains.csproj" />
+  </ItemGroup>
+
+</Project>

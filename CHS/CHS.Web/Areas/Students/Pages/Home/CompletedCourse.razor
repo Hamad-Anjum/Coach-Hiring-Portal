@@ -1,0 +1,65 @@
+﻿@page "/CompletedCourse"
+
+@if (_completedCourses == null)
+{
+
+    <div class="card-body">
+        <div id="DZ_W_TimeLine" class="widget-timeline dz-scroll height370" style="height:60vh;">
+            <ul class="timeline">
+                <li>
+                    <div class="timeline-badge warning"></div>
+                    <a class="timeline-panel text-muted" href="javascript:void(0)" style="cursor:default;border:1px solid rgba(253, 128, 36, 0.30)">
+                        <h4 class="mb-0 text-capitalize">No course has been completed yet.</h4>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid">
+        <div class="page-titles">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="Home">Home</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Trainers</a></li>
+            </ol>
+        </div>
+        <!-- row -->
+        <div class="row">
+            <div class="col-12 ">
+                <div class="card">
+                    <div class="card-header border-0 pb-0">
+                        <h4 class="card-title">Hired Trainer(s)</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="DZ_W_TimeLine" class="widget-timeline dz-scroll height370" style="height:60vh;">
+                            <ul class="timeline">
+                                @foreach (var item in _completedCourses)
+                                {
+                                    var d = item.EndDate - item.StartDate;
+
+                                    <li>
+                                        <div class="timeline-badge success"></div>
+
+                                        <p class="mb-0">Started at @item.StartDate.Date - @item.EndDate.Date</p>
+                                        <a class="timeline-panel text-muted" href="@item.MemberSubscriptionId" style="border:1px solid rgba(27, 208, 132, 0.40)">
+                                            <h5>
+                                                <span style="display:inline-block">
+                                                    <img src="Images/bg-01.jpg" class="img-box img-circle" height="50" width="50" />
+                                                </span> @item.Name
+                                            </h5>
+                                            <h6 class="mb-0"> Price <strong class="text-dark">@item.Price.ToString("c2")</strong></h6>
+                                            <span>@d.Divide(30) months Training</span>
+                                            <p class="badge badge-success badge-rounded float-right">Completed</p>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

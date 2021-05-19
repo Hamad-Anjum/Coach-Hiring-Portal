@@ -1,0 +1,82 @@
+﻿<!--**********************************
+       Student Sidebar
+   ***********************************-->
+<div class="deznav">
+    <div class="deznav-scroll">
+        <ul class="metismenu" id="menu">
+            <AuthorizeView Policy="FilledSurveyForm" Context="chs">
+                <Authorized>
+                    <li>
+                        <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                            <i class="flaticon-381-network"></i>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <AuthorizeView Context="db" Roles="Student,Gym,Trainer">
+                                <Authorized>
+                                    <li><NavLink href="Home">Home</NavLink></li>
+                                    <li><NavLink href="BasicInfo">Basic Info</NavLink></li>
+                                </Authorized>
+                            </AuthorizeView>
+                            <AuthorizeView Roles="Gym,Trainer">
+                                <Authorized>
+                                    <li><NavLink href="Profile">Profile</NavLink></li>
+                                    <li><NavLink href="Subscriptions/List">Subscriptions</NavLink></li>
+                                </Authorized>
+                            </AuthorizeView>
+                            <AuthorizeView Roles="Admin">
+                                <Authorized>
+                                    <li><NavLink href="District">District</NavLink></li>
+                                    <li><NavLink href="City">City</NavLink></li>
+                                    <li><NavLink href="State">State</NavLink></li>
+                                    <li><NavLink href="Country">Country</NavLink></li>
+                                </Authorized>
+                            </AuthorizeView>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <AuthorizeView Roles="Gym,Trainer,Student">
+                            <Authorized>
+                                <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                                    <i class="flaticon-381-television"></i>
+                                    <span class="nav-text">Search By</span>
+                                </a>
+                                <ul aria-expanded="false">
+                                    <li><NavLink href="Search/Trainer">Trainers</NavLink></li>
+                                    <li><NavLink href="Search/Gym">Gyms</NavLink></li>
+                                </ul>
+                            </Authorized>
+                        </AuthorizeView>
+                    </li>
+                    <li>
+                        <AuthorizeView Context="db" Roles="Gym,Trainer,Student">
+                            <Authorized>
+                                <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                                    <i class="flaticon-381-television"></i>
+                                    <span class="nav-text">Transaction</span>
+                                </a>
+                                <ul aria-expanded="false">
+                                    @{
+                                        if (db.User.IsInRole("Trainer") || db.User.IsInRole("Gym"))
+                                        {
+                                            <li><NavLink href="Installment">Installments</NavLink></li>
+                                        }
+                                        <li><NavLink href="History">History</NavLink></li>
+                                    }
+                                </ul>
+                            </Authorized>
+                        </AuthorizeView>
+                    </li>
+                    <NavMenuFooter />
+                </Authorized>
+                <NotAuthorized>
+                    <div style="position:absolute;bottom:1rem">
+                        <NavMenuFooter />
+                    </div>
+                </NotAuthorized>
+            </AuthorizeView>
+        </ul>
+    </div>
+</div>
+

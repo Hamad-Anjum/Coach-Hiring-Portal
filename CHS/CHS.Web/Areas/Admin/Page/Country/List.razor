@@ -1,0 +1,62 @@
+﻿@page "/Country"
+
+@if (_countries == null)
+{
+    <Loader />
+}
+else
+{
+    <div class="container mt-0">
+        <MatTable Id="matTbl" Items="_countries.OrderByDescending(x => x.Name)" LoadInitialData="true" PageLabel="Pages"
+                  PageRecordCountLabel="Records" SearchTermFieldPlaceHolder="Type" SearchTermFieldLabel="Search"
+                  ApiUrl="@($"{Constant.ApiUrl}Countries")" RequestApiOnlyOnce="true" AllowSelection="true"
+                  DebounceMilliseconds="0" PageSizes="ListPageSizeStructure.GetPageSizeStructures()" PageSize="4"
+                  FilterByColumnName="Name" UseSortHeaderRow="true" Class="table table-striped table-hover">
+            <MatTableHeader>
+                <MatSortHeaderRow>
+                    <MatSortHeader>Name</MatSortHeader>
+                    <MatSortHeader>Status</MatSortHeader>
+                    <MatSortHeader></MatSortHeader>
+                </MatSortHeaderRow>
+            </MatTableHeader>
+            <MatTableRow>
+                @if (_countries.Count == 0)
+                    {
+                    <MatH6 Style="font-weight:400">No Countries Were Found</MatH6>
+                    }
+                    else
+                    {
+                    <td>@context.Name</td>
+                    <td>@context.Status</td>
+                    <td>
+                        @if (context.Status.Equals("Active"))
+                            {
+                            <MatIconButton Icon="@MatIconNames.Delete" title="In Active This" Style="color:#48A9F8" OnClick="@(()=>Delete(context.Id))"></MatIconButton>
+                            }
+                            else
+                            {
+                            <MatIconButton Icon="@MatIconNames.Check" title="Active This" Style="color:#24e438" OnClick="@(()=>Delete(context.Id))"></MatIconButton>
+                            }
+                        <MatIconButton Icon="@MatIconNames.Delete_forever" title="Delete Forever" Style="color:#e42436" OnClick="@(()=>DeleteForever(context.Id))"></MatIconButton>
+                    </td>
+                    }
+            </MatTableRow>
+        </MatTable>
+    </div>
+}
+
+<MatH5 Class="mx-4">Add Country</MatH5>
+<div class="row container">
+    <div class="col-md-6 col-sm-12">
+        <MatTextField Type="text"
+                      @bind-Value="_model.Name"
+                      OnInput="(e)=>SetCountry(e.Value.ToString())"
+                      @onkeydown="AddCountryWithEnter" Style="width:100%" Required="true" Outlined="true" Icon="@MatIconNames.Flag" Label="Add new Country">
+            <MatIconButton OnClick="AddNewCountry" Style="color:#6200EE" Icon="@MatIconNames.Add"></MatIconButton>
+        </MatTextField>
+        @if (!string.IsNullOrEmpty(_countryMessage))
+        {
+            <span class="text-danger">@_countryMessage</span>
+        }
+    </div>
+</div>

@@ -1,0 +1,194 @@
+﻿@page "/"
+@namespace CHS.Web.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="~/" />
+
+    <title>CHS - Training Portal</title>
+
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="Jobie/images/favicon.png">
+
+    <link href="Jobie/vendor/jqvmap/css/jqvmap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="Jobie/vendor/chartist/css/chartist.min.css">
+    <!-- Vectormap -->
+    <link href="libs/animate.css/animate.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="Jobie/vendor/jqvmap/css/jqvmap.min.css" rel="stylesheet">
+
+    <!-- Daterange picker -->
+    <!--<link href="Jobie/vendor/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">-->
+    <!-- Clockpicker -->
+    <!--<link href="Jobie/vendor/clockpicker/css/bootstrap-clockpicker.min.css" rel="stylesheet">-->
+    <!-- asColorpicker -->
+    <!--<link href="Jobie/vendor/jquery-asColorPicker/css/asColorPicker.min.css" rel="stylesheet">-->
+    <!-- Material color picker -->
+    <!--<link href="Jobie/vendor/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">-->
+    <!-- Pick date -->
+    <!--<link rel="stylesheet" href="Jobie/vendor/pickadate/themes/default.css">
+    <link rel="stylesheet" href="Jobie/vendor/pickadate/themes/default.date.css">-->
+    <!-- Custom Stylesheet -->
+    <link href="Jobie/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="Jobie/css/style.css" rel="stylesheet">
+
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="https://cdn.lineicons.com/2.0/LineIcons.css" rel="stylesheet">
+    <link href="Jobie/vendor/owl-carousel/owl.carousel.css" rel="stylesheet">
+
+
+    <script src="_content/MatBlazor/dist/matBlazor.js"></script>
+    <link href="_content/MatBlazor/dist/matBlazor.css" rel="stylesheet" />
+
+    @*For native bootstrap styling*@
+    @*<link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" />*@
+
+    <link href="CHS.Web.styles.css" rel="stylesheet">
+    <link href="css/myStyle.css" rel="stylesheet" />
+</head>
+<body class="h-100">
+    <component type="typeof(App)" render-mode="Server" />
+
+    <script src="_framework/blazor.server.js"></script>
+
+    <script>
+        Blazor.defaultReconnectionHandler._reconnectCallback = function (d) {
+            document.location.reload();
+        }
+    </script>
+    <!--JavaScript at end of body for optimized loading-->
+    @*<script type="text/javascript" src="libs/materialize/js/materialize.min.js"></script>*@
+
+    <script src="Jobie/vendor/global/global.min.js"></script>
+    <script src="Jobie/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    @*<script src="libs/bootstrap/js/bootstrap.min.js"></script>*@
+    <script src="libs/font-awesome/js/all.js"></script>
+    <script src="Jobie/vendor/chart.js/Chart.bundle.min.js"></script>
+    <script src="Jobie/js/custom.min.js"></script>
+    <script src="Jobie/js/deznav-init.js"></script>
+    <script src="Jobie/vendor/owl-carousel/owl.carousel.js"></script>
+
+    <!-- Chart piety plugin files -->
+    <script src="Jobie/vendor/peity/jquery.peity.min.js"></script>
+
+    <!-- Dashboard 1 -->
+    <script src="Jobie/js/dashboard/dashboard-1.js"></script>
+
+
+    <script src="Jobie/vendor/jquery-steps/build/jquery.steps.min.js"></script>
+    <script src="Jobie/vendor/jquery-validation/jquery.validate.min.js"></script>
+    <!-- Form validate init -->
+    <script src="Jobie/js/plugins-init/jquery.validate-init.js"></script>
+
+    <!-- Form step init -->
+    <script src="Jobie/js/plugins-init/jquery-steps-init.js"></script>
+    <script src="libs/bootstrap/js/bootstrap.min.js"></script>
+
+    @*<script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@@^1/index.js"></script>*@
+
+    <script src="JavaScript.js"></script>
+
+
+
+    <!--<script src="Jobie/vendor/moment/moment.min.js"></script>
+    <script src="Jobie/vendor/bootstrap-daterangepicker/daterangepicker.js"></script>-->
+    @*clockpicker*@
+    <!--<script src="Jobie/vendor/clockpicker/js/bootstrap-clockpicker.min.js"></script>-->
+    @*asColorPicker*@
+    <!--<script src="Jobie/vendor/jquery-asColor/jquery-asColor.min.js"></script>
+    <script src="Jobie/vendor/jquery-asGradient/jquery-asGradient.min.js"></script>
+    <script src="Jobie/vendor/jquery-asColorPicker/js/jquery-asColorPicker.min.js"></script>-->
+    @*Material color picker*@
+    <!--<script src="Jobie/vendor/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>-->
+    @*pickdate*@
+    <!--<script src="Jobie/vendor/pickadate/picker.js"></script>
+    <script src="Jobie/vendor/pickadate/picker.time.js"></script>
+    <script src="Jobie/vendor/pickadate/picker.date.js"></script>-->
+    @*Daterangepicker*@
+    <!--<script src="Jobie/js/plugins-init/bs-daterange-picker-init.js"></script>-->
+    @*Clockpicker init*@
+    <!--<script src="Jobie/js/plugins-init/clock-picker-init.js"></script>-->
+    @*asColorPicker init*@
+    <!--<script src="Jobie/js/plugins-init/jquery-asColorPicker.init.js"></script>-->
+    @*Material color picker init*@
+    <!--<script src="Jobie/js/plugins-init/material-date-picker-init.js"></script>-->
+    @*Pickdate*@
+    <!--<script src="Jobie/js/plugins-init/pickadate-init.js"></script>-->
+
+
+
+    <script>
+        function carouselReview() {
+            /*  testimonial one function by = owl.carousel.js */
+            /*  testimonial one function by = owl.carousel.js */
+            jQuery('.testimonial-one').owlCarousel({
+                loop: true,
+                autoplay: true,
+                margin: 15,
+                nav: false,
+                dots: false,
+                left: true,
+                navText: ['', ''],
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    800: {
+                        items: 2
+                    },
+                    991: {
+                        items: 2
+                    },
+
+                    1200: {
+                        items: 2
+                    },
+                    1600: {
+                        items: 2
+                    }
+                }
+            })
+            jQuery('.testimonial-two').owlCarousel({
+                loop: true,
+                autoplay: true,
+                margin: 15,
+                nav: false,
+                dots: true,
+                left: true,
+                navText: ['', ''],
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 2
+                    },
+                    991: {
+                        items: 3
+                    },
+
+                    1200: {
+                        items: 3
+                    },
+                    1600: {
+                        items: 4
+                    }
+                }
+            })
+        }
+        jQuery(window).on('load', function () {
+            setTimeout(function () {
+                carouselReview();
+            }, 1000);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+﻿@page "/Subscriptions/Add"
+
+<div class="container-fluid">
+    <div class="page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="Subscriptions/List">Subscriptions</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Add</a></li>
+        </ol>
+    </div>
+    <EditForm Model="_model" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="text-danger" />
+
+        <div class="row">
+            <div class="col-xl-6 col-sm-12 my-3">
+                <MatTextField @bind-Value="_model.Name" Type="text" Required="true" Label="Name" Outlined="true" @onfocusout="ValidateName" Icon="@MatIconNames.Label"></MatTextField>
+                @if (!string.IsNullOrEmpty(_nameMessage))
+                {
+                    <span class="text-danger">@_nameMessage</span>
+                }
+            </div>
+            <div class="col-xl-6 col-sm-12 my-3">
+                <MatTextField @bind-Value="_model.Price" Outlined="true" Label="Price" Type="number"
+                              min="1" step="0.1" max="@int.MaxValue" Icon="@MatIconNames.Money"></MatTextField>
+            </div>
+            <div class="col-xl-6 col-sm-12 my-3">
+                <MatTextField @bind-Value="_model.SubscriptionMonths" Type="number" Label="Subscription Months" min="0.5" step="0.5" PlaceHolder="0.5" Outlined="true" Icon="@MatIconNames.Date_range"></MatTextField>
+            </div>
+            @if (_role.Equals("Trainer"))
+            {
+                <div class="col-xl-6 col-sm-12 my-3" style="position:relative">
+                    <MatTextField @bind-Value="_model.TrainingDays" ReadOnly="true" @onfocusin="ToggleDaysList" Label="Training Day" Style="z-index:100"
+                                  Outlined="true" Icon="@MatIconNames.View_day" HelperText="Max 4 days" HelperTextPersistent="true">
+                        <MatChipSet Style="flex-wrap:nowrap">
+                            @foreach (var item in _selectedDays)
+                                {
+                                <MatChip Label="@item" TrailingIcon="@MatIconNames.Clear" Style="background-color: #fff; color: #007bff; border: 1PX solid #007bff;" TrailingIconClick="@(() => RemoveDay(item))"></MatChip>
+                                }
+                        </MatChipSet>
+                    </MatTextField>
+                    @if (_showDays)
+                    {
+                        <ul class="list-group ml-5" style="position:absolute;z-index:10">
+                            @foreach (var item in _days.OrderBy(x => x.Key))
+                            {
+                                <li class="list-group-item"><button type="button" disabled="@item.Value" class="btn btn-block" @onclick="@(()=>SelectDay(item.Key))"> @item.Key</button></li>
+                            }
+                        </ul>
+                    }
+                </div>
+
+                <div class="col-xl-6 col-sm-12 my-3">
+                    <MatTextField Type="time" @bind-Value="_model.TrainingTiming" Icon="@MatIconNames.Timer"></MatTextField>
+                </div>
+            }
+
+            <div class="col-xl-6 col-sm-12 my-3">
+                <MatTextField @bind-Value="_model.Detail" Type="text" Label="Detail" rows="6" PlaceHolder="Optional..."
+                              TextArea="false" Outlined="true"></MatTextField>
+            </div>
+            <div class="col-xl-6 col-sm-12 my-3">
+                <MatIconButton type="submit" title="Save" Icon="@MatIconNames.Add" Class="add" Disabled="_disable" Style="color:#40189D"></MatIconButton>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+@code{
+    private List<string> ids = new List<string>();
+}

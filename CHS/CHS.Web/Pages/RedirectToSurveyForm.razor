@@ -1,0 +1,26 @@
+﻿
+
+@code{
+
+    private Guid _id;
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    [Inject]
+    public ProtectedLocalStorage ProtectedLocal { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await ProtectedLocal.GetAsync<string>("id");
+        if (result.Success)
+        {
+            _id = Guid.Parse(result.Value);
+            NavigationManager.NavigateTo($"Survey/{_id}");
+        }
+        else
+        {
+            NavigationManager.NavigateTo($"Login");
+        }
+    }
+}

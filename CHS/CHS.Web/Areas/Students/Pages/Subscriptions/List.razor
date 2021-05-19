@@ -1,0 +1,72 @@
+﻿@page "/Subscriptions/List"
+<div class="container-fluid px-3">
+    <div class="row">
+        <div class="page-titles col-xl-11 col-sm-12">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Subscriptions</a></li>
+            </ol>
+        </div>
+        @if (_models != null)
+        {
+            <div class="col-xl-1 mb-4">
+                <MatIconButton Class="add" OnClick="@(() => { NavigationManager.NavigateTo("Subscriptions/Add"); })" Icon="@MatIconNames.Add"></MatIconButton>
+            </div>
+        }
+    </div>
+    @if (_models == null)
+    {
+        <Loader />
+    }
+    else
+    {
+        <div class="container-fluid mt-0 p-0">
+            <MatTable Id="matTbl" Items="_models" LoadInitialData="true" PageLabel="Pages"
+                      PageRecordCountLabel="Records" SearchTermFieldPlaceHolder="Type" SearchTermFieldLabel="Search"
+                      ApiUrl="@($"{Constant.ApiUrl}Subscriptions/GetAllByOwners")" RequestApiOnlyOnce="true" AllowSelection="true"
+                      DebounceMilliseconds="0" PageSizes="ListPageSizeStructure.GetPageSizeStructures()" PageSize="4"
+                      FilterByColumnName="Name" UseSortHeaderRow="true" Class="table table-striped table-hover">
+                <MatTableHeader>
+                    <MatSortHeaderRow>
+                        <MatSortHeader>Name</MatSortHeader>
+                        <MatSortHeader>Price</MatSortHeader>
+                        <MatSortHeader>Month(s)</MatSortHeader>
+                        <MatSortHeader>Details</MatSortHeader>
+                        <MatSortHeader>Status</MatSortHeader>
+                        <MatSortHeader></MatSortHeader>
+                    </MatSortHeaderRow>
+                </MatTableHeader>
+                <MatTableRow>
+                    @if (_models.Count == 0)
+                        {
+                        <td>
+                            <MatH6 Style="font-weight:400">No Subscriptions Were Found</MatH6>
+                        </td>
+                        }
+                        else
+                        {
+                        <td>@context.Name</td>
+                        <td>@string.Format(new CultureInfo("ar-SA"), "{0:C2}", context.Price)</td>
+                        <td>@context.SubscriptionMonths</td>
+                        <td>
+                            <div style="max-width:150px;max-height:70px;overflow:hidden">
+                                @context.Detail
+                            </div>
+                            ...
+                        </td>
+                        <td>@(context.IsActive ?"Active":"In Active")</td>
+                        <td>
+                            @if (context.IsActive)
+                                {
+                                <MatIconButton OnClick="@(()=> { NavigationManager.NavigateTo($"Subscriptions/Edit/{context.SubscriptionId}"); })" Icon="@MatIconNames.Edit" title="Edit This" Style="color:#0D6EFD"></MatIconButton>
+                                <MatIconButton Icon="@MatIconNames.Delete" title="In Active This" Style="color:#e42436" OnClick="@(()=>ActiveToggle(context.SubscriptionId))"></MatIconButton>
+                                }
+                                else
+                                {
+                                <MatIconButton Icon="@MatIconNames.Check" title="Active This" Style="color:#24e438" OnClick="@(()=>ActiveToggle(context.SubscriptionId))"></MatIconButton>
+                                }
+                        </td>
+                        }
+                </MatTableRow>
+            </MatTable>
+        </div>}
+</div>

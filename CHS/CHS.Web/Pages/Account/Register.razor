@@ -1,0 +1,84 @@
+﻿@layout LoginLayout
+@page "/Register"
+
+<div class="authincation h-100" style="background-image: url('Images/bg-01.jpg');">
+    <div class="h-100 mycontainer" style="background-color: rgba(255,255,255,0.8);">
+        @if (_disable)
+        {
+            <div class="container text-center">
+                <h4 class="text-center">Processing...</h4>
+                <LoginProcess />
+            </div>
+        }
+        else
+        {
+            <div class="row justify-content-center h-100 align-items-center">
+                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-9">
+
+                    <div class="authincation-content">
+                        <div class="row no-gutters">
+                            <div class="col-xl-12 col-sm-11">
+                                <div class="auth-form">
+                                    <div class="text-center mb-3">
+                                        <a href="index.html"><img src="Jobie/images/logo-full.png" alt=""></a>
+                                    </div>
+                                    <h4 class="text-center mb-4 text-white">Sign up your account</h4>
+                                    <EditForm Model="_register" OnValidSubmit="HandleValidSubmit">
+                                        <div class="text-danger" style="color:red !important">
+                                            <DataAnnotationsValidator />
+                                            <ValidationSummary />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="mb-1 text-white"><strong>Username</strong></label>
+                                            <InputText @bind-Value="_register.UserName" @onfocusout="CheckUserName"
+                                                       class="form-control" placeholder="username"></InputText>
+                                            @if (!string.IsNullOrEmpty(_usernameMessage))
+                                            {
+                                                <span class="text-danger">@_usernameMessage</span>
+                                            }
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="mb-1 text-white"><strong>Email</strong></label>
+                                            <InputText @bind-Value="_register.Email" @onfocusout="CheckEmail" class="form-control" placeholder="hello@example.com"></InputText>
+                                            @if (!string.IsNullOrEmpty(_emailMessage))
+                                            {
+                                                <span class="text-danger">@_emailMessage</span>
+                                            }
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="mb-1 text-white"><strong>Password</strong></label>
+                                            <InputText type="password" @bind-Value="_register.Password" class="form-control"></InputText>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="mb-1 text-white"><strong>Confirm Password</strong></label>
+                                            <InputText type="password" @bind-Value="_register.ConfirmPassword" class="form-control"></InputText>
+                                        </div>
+                                        <MatSelect @bind-Value="_register.Role" Label="Who are you?"
+                                                   Style="background-color:#FFFFFF"
+                                                   Icon="@MatIconNames.Verified_user" Outlined="true" FullWidth="true">
+                                            <MatOptionString Value="Student">Student</MatOptionString>
+                                            <MatOptionString Value="Gym">Gym</MatOptionString>
+                                            <MatOptionString Value="Trainer">Trainer</MatOptionString>
+                                        </MatSelect>
+                                        @if (!string.IsNullOrEmpty(_roleMessage))
+                                        {
+                                            <span class="text-danger">@_roleMessage</span>
+                                        }
+                                        <div class="text-center mt-4">
+                                            <button type="submit" class="btn bg-white text-primary btn-block">Sign me up</button>
+                                        </div>
+                                    </EditForm>
+                                    <div class="new-account mt-3">
+                                        <p class="text-white">Already have an account? <a class="text-white" href="Login">Sign in</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+

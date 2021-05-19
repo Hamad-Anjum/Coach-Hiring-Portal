@@ -1,0 +1,11 @@
+Environment Variable::
+VaultUri
+
+Connection String ::
+https://crudapivault.vault.azure.net/
+
+username:
+hamadanjum15
+
+password:
+z3qlpnq54jpf55xdz76h54hulr3ji4a7qnhjwptjlrvuovy5nglq

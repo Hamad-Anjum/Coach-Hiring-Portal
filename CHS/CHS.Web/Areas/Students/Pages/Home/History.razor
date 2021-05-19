@@ -1,0 +1,113 @@
+﻿@page "/History"
+
+@if (_studentHistory == null && _gymHistory == null && _trainerHistory == null)
+{
+    <Loader />
+}
+else if (_role.Equals("Student"))
+{
+    <div class="container-fluid">
+        <div class="page-titles">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Transaction</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">History</a></li>
+            </ol>
+        </div>
+        <!-- row -->
+        <div class="row">
+            <div class="col-12 ">
+                <div class="card">
+                    <div class="card-header border-0 pb-0">
+                        <h4 class="card-title">History</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="DZ_W_TimeLine" class="widget-timeline dz-scroll height370" style="height:60vh;">
+                            <ul class="timeline">
+                                @foreach (var item in _studentHistory)
+                                {
+                                    var datetime = item.EndDate.Month - item.StartDate.Month;
+                                    if (DateTime.Now < item.EndDate)
+                                    {
+                                        <li>
+                                            <div class="timeline-badge success">
+                                            </div>
+                                            <a class="timeline-panel text-muted" href="#" style="border:1px solid rgba(27, 208, 132, 0.40)">
+                                                <span>@datetime.ToString().Trim('-') months ago</span>
+                                                <h6 class="mb-0">@item.SubscriptionName in <strong class="text-dark">@item.Price.ToString("c2")</strong></h6>
+                                                <p class="mb-0">@item.Description</p>
+                                                <p class="badge badge-success badge-rounded float-right">Current</p>
+                                            </a>
+                                        </li>
+                                    }
+                                    else if (DateTime.Now < item.StartDate)
+                                    {
+                                        <li>
+                                            <div class="timeline-badge info">
+                                            </div>
+                                            <a class="timeline-panel text-muted" style="border:1px solid rgba(72, 169, 248, 0.50)" href="#">
+                                                <span>@datetime.ToString().Trim('-') months ago</span>
+                                                <h6 class="mb-0">@item.SubscriptionName in <strong class="text-info">@item.Price.ToString("c2")</strong></h6>
+                                                <p class="mb-0">@item.Description</p>
+                                                <p class="badge badge-info badge-rounded float-right">Coming Soon</p>
+                                            </a>
+                                        </li>
+                                    }
+                                    else if (DateTime.Now > item.EndDate)
+                                    {
+                                        <li>
+                                            <div class="timeline-badge danger"></div>
+                                            <a class="timeline-panel text-muted" href="#">
+                                                <span>@datetime.ToString().Trim('-') months ago</span>
+                                                <h6 class="mb-0">@item.SubscriptionName in <strong class="text-warning">@item.Price.ToString("c2")</strong></h6>
+                                                <p class="mb-0">@item.Description</p>
+                                                <p class="badge badge-danger badge-rounded float-right">Completed</p>
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (_role.Equals("Gym") || _role.Equals("Trainer"))
+{
+    <div class="container-fluid">
+        <div class="page-titles">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Transaction</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">History</a></li>
+            </ol>
+        </div>
+        <!-- row -->
+        <div class="row">
+            <div class="col-12 ">
+                <div class="card">
+                    <div class="card-header border-0 pb-0">
+                        <h4 class="card-title">History</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="DZ_W_TimeLine" class="widget-timeline dz-scroll height370" style="height:60vh;">
+                            <ul class="timeline">
+                                <Virtualize Items="_gymHistory" Context="item" TItem="GymHistoryViewModel">
+                                    <li>
+                                        <div class="timeline-badge success"></div>
+                                        <a href="javascript:void(0)" class="timeline-panel text-muted" style="border:1px solid rgba(27, 208, 132, 0.40)">
+                                            <h6 class="mb-0">For @item.SubscriptionName <strong class="text-warning">@item.Price.ToString("c2")</strong></h6>
+                                            <p>On @item.TransactionDate.ToLongDateString()</p>
+                                            @*<h6>Installment @item.InstallmentNumber</h6>*@
+                                            <p class="badge badge-@(@item.InstallmentNumber==1?"success":@item.InstallmentNumber==2?"danger":@item.InstallmentNumber==3?"info":"warning") badge-rounded float-right">Installment @item.InstallmentNumber</p>
+                                        </a>
+                                    </li>
+                                </Virtualize>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

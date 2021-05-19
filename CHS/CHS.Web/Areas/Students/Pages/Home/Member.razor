@@ -1,0 +1,207 @@
+﻿@page "/Members"
+
+@if (_memberTrainers == null && _memberGyms == null && _memberStudents == null)
+{
+    <Loader />
+}
+else if (_role.Equals("Student"))
+{
+    <div class="container-fluid">
+        <div class="page-titles">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="Home">Home</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Trainers</a></li>
+            </ol>
+        </div>
+        <!-- row -->
+        <div class="row">
+            <div class="col-12 ">
+                <div class="card">
+                    <div class="card-header border-0 pb-0 row">
+                        <div class="col-5">
+                            <h4 class="card-title">Hired Trainer(s)</h4>
+                        </div>
+                        <div class="col-7">
+                            <div class="float-right">
+                                @if (_selectJoinDate)
+                                {
+                                    <MatDatePicker @bind-Value="_dateFilter" Label="Select Join Date" Outlined="true"></MatDatePicker>
+                                }
+                                <MatSelect Value="_searchBy" Label="Order By"
+                                           ValueExpression="@(()=>_searchBy)"
+                                           ValueChanged="@((string e) => OrderByChange(e))"
+                                           Outlined="true"
+                                           Icon="@MatIconNames.Filter_list">
+                                    <MatOptionString Value="FirstName">First Name</MatOptionString>
+                                    <MatOptionString Value="LastName">Last Name</MatOptionString>
+                                    <MatOptionString Value="Designation">Designation</MatOptionString>
+                                    @*<MatOptionString Value="JoinDate">Join Date</MatOptionString>
+                                        <MatOptionString Value="Date">Date Range</MatOptionString>*@
+                                </MatSelect>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="DZ_W_TimeLine" class="widget-timeline dz-scroll height370" style="height:60vh;">
+                            <ul class="timeline">
+                                @foreach (var item in _memberTrainers)
+                                {
+                                    var datetime = item.SubscriptionDate;
+                                    <li>
+                                        <div class="timeline-badge success"></div>
+                                        <a class="timeline-panel text-muted" href="@("Profile/" + item.MemberId)" style="border:1px solid rgba(27, 208, 132, 0.40)">
+                                            <h5>
+                                                <span style="display:inline-block">
+                                                    <img src="Images/bg-01.jpg" class="img-box img-circle" height="50" width="50" />
+                                                </span> @item.FirstName, @item.LastName
+                                            </h5>
+                                            <h6 class="mb-0">For @item.SubscriptionName </h6>
+                                            <h6><strong class="text-dark">@item.Price.ToString("c2")</strong></h6>
+                                            <span>@item.SubscriptionDuration months Training</span>
+                                            <p class="mb-0">Started at @item.SubscriptionDate.Date.ToLongDateString()</p>
+                                            <p class="badge badge-success badge-rounded float-right">@item.Designation</p>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (_role.Equals("Gym"))
+{
+    <div class="container-fluid">
+        <div class="page-titles">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="Home">Home</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Members</a></li>
+            </ol>
+        </div>
+        <!-- row -->
+        <div class="row">
+            <div class="col-12 ">
+                <div class="card">
+                    <div class="card-header border-0 pb-0 row">
+                        <div class="col-5 float-left">
+                            <h4 class="card-title">Gym Member(s)</h4>
+                        </div>
+                        <div class="col-7">
+                            <div class="float-right">
+                                @if (_selectJoinDate)
+                                {
+                                    <MatDatePicker @bind-Value="_dateFilter" Label="Select Join Date" Outlined="true"></MatDatePicker>
+                                }
+                                <MatSelect Value="_searchBy" Label="Order By"
+                                           ValueExpression="@(()=>_searchBy)"
+                                           ValueChanged="@((string e) => OrderByChange(e))"
+                                           Outlined="true"
+                                           Icon="@MatIconNames.Filter_list">
+                                    <MatOptionString Value="FirstName">First Name</MatOptionString>
+                                    <MatOptionString Value="LastName">Last Name</MatOptionString>
+                                    <MatOptionString Value="Designation">Designation</MatOptionString>
+                                    <MatOptionString Value="Active">Active</MatOptionString>
+                                    <MatOptionString Value="JoinDate">Join Date</MatOptionString>
+                                    <MatOptionString Value="Date">Date Range</MatOptionString>
+                                </MatSelect>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="DZ_W_TimeLine" class="widget-timeline dz-scroll height370" style="height:60vh;">
+                            <ul class="timeline">
+                                <Virtualize Items="_memberGyms" Context="item" ItemSize="10" OverscanCount="10">
+                                    <li>
+                                        <div class="timeline-badge @(item.IsStillActive ? "info" : "danger")"></div>
+                                        <a class="timeline-panel text-muted" href="@("BasicInfo/"+item.MemberId)" style="border: 1px solid @(item.IsStillActive?"rgba(27, 208, 132, 0.40)":"rgba(254, 172, 154, 0.50)")">
+                                            <h5>
+                                                <span style="display:inline-block">
+                                                    <img src="Images/bg-01.jpg" class="img-box img-circle" height="50" width="50" />
+                                                </span> @item.FirstName, @item.LastName
+                                            </h5>
+                                            <h6 class="mb-0">For @item.SubscriptionName </h6>
+                                            <h6>Paid <strong class="text-@(item.IsStillActive?"dark":"warning")">@item.Price.ToString("c2")</strong></h6>
+                                            <span>@item.SubscriptionDuration months Training</span>
+                                            <p class="mb-0">Started at @item.SubscriptionDate.Date.ToLongDateString()</p>
+                                            <p class="mb-0">Absent Since : @item.LastPresentDate.Date.ToLongDateString()</p>
+                                            <p class="badge badge-@(item.IsStillActive?"info":"danger") badge-rounded float-right"> @item.Designation</p>
+                                        </a>
+                                    </li>
+                                </Virtualize>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else if (_role.Equals("Trainer"))
+{
+    <div class="container-fluid">
+        <div class="page-titles">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="Home">Home</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">Students</a></li>
+            </ol>
+        </div>
+        <!-- row -->
+        <div class="row">
+            <div class="col-12 ">
+                <div class="card">
+                    <div class="card-header border-0 pb-0 row">
+                        <div class="col-5">
+                            <h4 class="card-title">Total Student(s)</h4>
+                        </div>
+                        <div class="col-7">
+                            <div class="float-right">
+                                @if (_selectJoinDate)
+                                {
+                                    <MatDatePicker @bind-Value="_dateFilter" Label="Select Join Date" Outlined="true"></MatDatePicker>
+                                }
+                                <MatSelect Value="_searchBy" Label="Order By"
+                                           ValueExpression="@(()=>_searchBy)"
+                                           ValueChanged="@((string e) => OrderByChange(e))"
+                                           Outlined="true"
+                                           Icon="@MatIconNames.Filter_list">
+                                    <MatOptionString Value="FirstName">First Name</MatOptionString>
+                                    <MatOptionString Value="LastName">Last Name</MatOptionString>
+                                    <MatOptionString Value="Designation">Designation</MatOptionString>
+                                    <MatOptionString Value="Active">Active</MatOptionString>
+                                    <MatOptionString Value="JoinDate">Join Date</MatOptionString>
+                                    <MatOptionString Value="Date">Date Range</MatOptionString>
+                                </MatSelect>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="DZ_W_TimeLine" class="widget-timeline dz-scroll height370" style="height:60vh;">
+                            <ul class="timeline">
+                                <Virtualize Items="_memberStudents" Context="item" ItemSize="10" OverscanCount="10">
+                                    <li>
+                                        <div class="timeline-badge @(item.IsStillActive ? "info" : "danger")"></div>
+                                        <a class="timeline-panel text-muted" href="@("BasicInfo/"+item.MemberId)" style="border: 1px solid @(item.IsStillActive?"rgba(27, 208, 132, 0.40)":"rgba(254, 172, 154, 0.50)")">
+                                            <h5>
+                                                <span style="display:inline-block">
+                                                    <img src="Images/bg-01.jpg" class="img-box img-circle" height="50" width="50" />
+                                                </span> @item.FirstName, @item.LastName
+                                            </h5>
+                                            <h6 class="mb-0">For @item.SubscriptionName </h6>
+                                            <h6>Paid <strong class="text-@(item.IsStillActive?"dark":"warning")">@item.Price.ToString("c2")</strong></h6>
+                                            <span>@item.SubscriptionDuration months Training</span>
+                                            <p class="mb-0">Started at @item.SubscriptionStartDate.Date.ToLongDateString()</p>
+                                            <p class="mb-0">Absent Since : @item.LastPresentDate.Date.ToLongDateString()</p>
+                                            <p class="badge badge-@(item.IsStillActive?"info":"danger") badge-rounded float-right"> @item.Designation</p>
+                                        </a>
+                                    </li>
+                                </Virtualize>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

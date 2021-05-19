@@ -1,0 +1,135 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>48ae4a3c-29dc-4b94-8b4e-6dadc15298db</UserSecretsId>
+	<LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Authentication\**" />
+    <Compile Remove="Services\**" />
+    <Compile Remove="wwwroot\Fitness-gym-and-sport-html-template-athlete\**" />
+    <Content Remove="Authentication\**" />
+    <Content Remove="Services\**" />
+    <Content Remove="wwwroot\Fitness-gym-and-sport-html-template-athlete\**" />
+    <EmbeddedResource Remove="Authentication\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <EmbeddedResource Remove="wwwroot\Fitness-gym-and-sport-html-template-athlete\**" />
+    <None Remove="Authentication\**" />
+    <None Remove="Services\**" />
+    <None Remove="wwwroot\Fitness-gym-and-sport-html-template-athlete\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Constant.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="bundleconfig.json" />
+    <Content Remove="Shared\Footer.razor" />
+    <Content Remove="Shared\Gyms\Header.razor" />
+    <Content Remove="Shared\Gyms\NavHeader.razor" />
+    <Content Remove="Shared\Gyms\NavMenu.razor" />
+    <Content Remove="Shared\MainLayout.razor" />
+    <Content Remove="Shared\Students\Header.razor" />
+    <Content Remove="Shared\Trainers\Header.razor" />
+    <Content Remove="Shared\Trainers\NavHeader.razor" />
+    <Content Remove="Shared\Trainers\NavMenu.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Shared\Gyms\NavMenu.razor.css" />
+    <None Remove="Shared\MainLayout.razor.css" />
+    <None Remove="Shared\Trainers\NavMenu.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\fonts\fontawesome-webfont.svg" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\fonts\fontawesome-webfont.woff2" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\animated.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\bordered-pulled.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\core.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\fixed-width.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\font-awesome.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\icons.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\larger.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\list.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\mixins.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\path.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\rotated-flipped.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\screen-reader.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\stacked.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\less\variables.less" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\font-awesome.scss" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\_animated.scss" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\_bordered-pulled.scss" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\_core.scss" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\_fixed-width.scss" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\_icons.scss" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\_larger.scss" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\_list.scss" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\_mixins.scss" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\_path.scss" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\_rotated-flipped.scss" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\_screen-reader.scss" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\_stacked.scss" />
+    <None Include="wwwroot\css\Login\font-awesome-4.7.0\scss\_variables.scss" />
+    <None Include="wwwroot\css\Login\iconic\fonts\Material-Design-Iconic-Font.svg" />
+    <None Include="wwwroot\css\Login\iconic\fonts\Material-Design-Iconic-Font.woff2" />
+    <None Include="wwwroot\css\Login\js\main.js" />
+    <None Include="wwwroot\css\Login\vendor\animsition\js\animsition.js" />
+    <None Include="wwwroot\css\Login\vendor\animsition\js\animsition.min.js" />
+    <None Include="wwwroot\css\Login\vendor\bootstrap\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\css\Login\vendor\bootstrap\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\css\Login\vendor\bootstrap\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\css\Login\vendor\bootstrap\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\css\Login\vendor\bootstrap\css\bootstrap.css.map" />
+    <None Include="wwwroot\css\Login\vendor\bootstrap\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\css\Login\vendor\bootstrap\js\bootstrap.js" />
+    <None Include="wwwroot\css\Login\vendor\bootstrap\js\bootstrap.min.js" />
+    <None Include="wwwroot\css\Login\vendor\bootstrap\js\popper.js" />
+    <None Include="wwwroot\css\Login\vendor\bootstrap\js\popper.min.js" />
+    <None Include="wwwroot\css\Login\vendor\bootstrap\js\tooltip.js" />
+    <None Include="wwwroot\css\Login\vendor\countdowntime\countdowntime.js" />
+    <None Include="wwwroot\css\Login\vendor\daterangepicker\daterangepicker.js" />
+    <None Include="wwwroot\css\Login\vendor\daterangepicker\moment.js" />
+    <None Include="wwwroot\css\Login\vendor\daterangepicker\moment.min.js" />
+    <None Include="wwwroot\css\Login\vendor\jquery\jquery-3.2.1.min.js" />
+    <None Include="wwwroot\css\Login\vendor\perfect-scrollbar\perfect-scrollbar.min.js" />
+    <None Include="wwwroot\css\Login\vendor\select2\select2.js" />
+    <None Include="wwwroot\css\Login\vendor\select2\select2.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MatBlazor" Version="2.8.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation" Version="3.2.0-rc1.20223.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="5.0.6" />
+    <PackageReference Include="Microsoft.Azure.SignalR" Version="1.8.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CHS.Domains\CHS.Domains.csproj" />
+    <ProjectReference Include="..\CHS.Infrastructure\CHS.Infrastructure.csproj" />
+    <ProjectReference Include="..\CHS.Services\CHS.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Content\Images\gym\CoverPictures\" />
+    <Folder Include="wwwroot\Content\Images\gym\Logos\" />
+    <Folder Include="wwwroot\Content\Images\gym\MainSiteImage\" />
+    <Folder Include="wwwroot\Content\Images\gym\Posts\" />
+    <Folder Include="wwwroot\Content\Images\gym\ProfilePictures\" />
+    <Folder Include="wwwroot\Content\Images\trainer\CoverPictures\" />
+    <Folder Include="wwwroot\Content\Images\trainer\Logos\" />
+    <Folder Include="wwwroot\Content\Images\trainer\MainSiteImage\" />
+    <Folder Include="wwwroot\Content\Images\trainer\Posts\" />
+    <Folder Include="wwwroot\Content\Images\trainer\ProfilePictures\" />
+  </ItemGroup>
+
+</Project>

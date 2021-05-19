@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="MatBlazor" Version="2.8.0" />
+	<PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="5.0.6" />
+	<PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+	<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+	<PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+  <ItemGroup>
+	<ProjectReference Include="..\CHS.Infrastructure\CHS.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

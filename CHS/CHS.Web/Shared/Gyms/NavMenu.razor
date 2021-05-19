@@ -1,0 +1,50 @@
+﻿<!--**********************************
+       Student Sidebar
+   ***********************************-->
+<div class="deznav">
+    <div class="deznav-scroll">
+        <ul class="metismenu" id="menu">
+            <li>
+                <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    <i class="flaticon-381-network"></i>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><NavLink href="Home-g">Home</NavLink></li>
+                    <li><NavLink href="BasicInfo">Basic Info</NavLink></li>
+                    <AuthorizeView Roles="Gym,Trainer"> 
+                        <Authorized>
+                            <li><NavLink href="Profile">Profile</NavLink></li>
+                        </Authorized>
+                    </AuthorizeView>
+                </ul>
+            </li>
+
+            <li>
+                <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    <i class="flaticon-381-television"></i>
+                    <span class="nav-text">Search By</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><NavLink href="Search/Trainer">Trainers</NavLink></li>
+                    <li><NavLink href="Search/Gym">Gyms</NavLink></li>
+                </ul>
+            </li>
+            <li>
+                <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    <i class="flaticon-381-television"></i>
+                    <span class="nav-text">Transaction</span>
+                </a>
+                <ul aria-expanded="false">
+                    <AuthorizeView Roles="Gym,Trainer">
+                        <Authorized>
+                            <li><NavLink href="Current-Installments-g">Current Installments</NavLink></li>
+                        </Authorized>
+                    </AuthorizeView>
+                    <li><NavLink href="History-g">History</NavLink></li>
+                </ul>
+            </li>
+        </ul>
+        <NavMenuFooter />
+    </div>
+</div>

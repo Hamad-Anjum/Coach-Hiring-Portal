@@ -1,0 +1,855 @@
+﻿@page "/Survey"
+@page "/Survey/{Id:guid}"
+@using MatBlazor
+@using System.Globalization
+
+<div class="container-fluid">
+    <div class="page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Survey</a></li>
+        </ol>
+    </div>
+    <div class="row">
+        <div class="col-xl-12 col-xxl-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Form step</h4>
+                </div>
+                <div class="card-body">
+
+                    <EditForm Model="_postModel" enctype="multipart/form-data" OnValidSubmit="HandleValidSubmit">
+                        <ObjectGraphDataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div>
+                            @if (_getModel != null)
+                            {
+                                <MatTabGroup @bind-ActiveIndex="@tabIndex" Id="tabList">
+                                    <MatTab Label="Personal Info" @onclick="@(() => ChangeTab(0))">
+                                        @if (!string.IsNullOrEmpty(_personalInfoMessage))
+                                        {
+                                            <span class="text-danger text-center mt-3">@_personalInfoMessage</span>
+                                        }
+                                    <div class="row mt-5">
+                                        <div class="col-lg-2 col-md-6 col-sm-12 mb-2 my-2">
+                                            <img src="@(string.IsNullOrEmpty(_imgSrc) ? "Images/1.jpg" : _imgSrc)" class="rounded rounded-3" width="100%" height="100%" />
+                                        </div>
+                                        <div class="col-lg-10 col-md-6 col-sm-12 mb-2 my-2">
+                                            <div class="form-group">
+                                                <MatFileUpload OnChange="FileChange"
+                                                               @bind-Value="_postModel.PersonalInfo.ProfilePicture"
+                                                               Label="Profile Picture"></MatFileUpload>
+                                            </div>
+                                        </div>
+                                        <div class="my-3 col-12"></div>
+                                        <div class="col-lg-6 mb-2">
+                                            <div class="form-group">
+                                                <MatTextField @bind-Value="_postModel.PersonalInfo.FirstName" Icon="@MatIconNames.Person" Outlined="true" Label="First Name" Required="true"></MatTextField>
+                                                <ValidationMessage For="@(() => _postModel.PersonalInfo.FirstName)" class="text-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-2">
+                                            <div class="form-group">
+                                                <MatTextField @bind-Value="_postModel.PersonalInfo.LastName" Icon="@MatIconNames.Person" Outlined="true" Label="Last Name" Required="true"></MatTextField>
+                                                <ValidationMessage For="@(() => _postModel.PersonalInfo.LastName)" class="text-danger" />
+                                            </div>
+                                        </div>
+                                        @if (_role.Equals("Trainer"))
+                                        {
+                                            <div class="col-lg-6 mb-2 my-2">
+                                                <div class="form-group">
+                                                    <MatSelect @bind-Value="_postModel.PersonalInfo.GenderId" TValue="Guid" Label="Gender" Outlined="true" Icon="@MatIconNames.Call_merge">
+                                                        @if (_getModel.Genders != null)
+                                                        {
+                                                            foreach (var item in _getModel.Genders)
+                                                            {
+                                                                <MatOption TValue="Guid" Value="item.Id">@item.Name</MatOption>
+                                                            }
+                                                        }
+                                                    </MatSelect>
+                                                    <ValidationMessage For="@(() => _postModel.PersonalInfo.GenderId)" class="text-danger" />
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (_role.Equals("Gym"))
+                                        {
+                                            <div class="col-lg-6 mb-2 my-2">
+                                                <div class="form-group">
+                                                    <MatTextField @bind-Value="_postModel.PersonalInfo.MiddleName"
+                                                                  Icon="@MatIconNames.Nature" Outlined="true"
+                                                                  Label="Gym Name" Required="true"></MatTextField>
+                                                    <ValidationMessage For="@(() => _postModel.PersonalInfo.MiddleName)" class="text-danger" />
+                                                    </div>
+                                                    </div>
+                                                    }
+                                                    <div class="col-lg-6 mb-2 my-2">
+                                                        <div class="form-group">
+                                                            <MatDatePicker @bind-Value="_postModel.PersonalInfo.DateOfBirth"
+                                                                           Maximum="@(_role.Equals("Trainer") ? DateTime.Now.AddYears(-10) : DateTime.Now.AddMonths(9))" Required="true" Outlined="true" Label="@(_role.Equals("Trainer") ? "Date of Birth" : "Opening Date")"></MatDatePicker>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 mb-2 my-2">
+                                                        <div class="form-group">
+                                                            <MatTextField @bind-Value="_postModel.Designation"
+                                                                          Icon="@MatIconNames.Person_pin_circle"
+                                                                          Required="true" Outlined="true"
+                                                                          Label="Designation">
+                                                            </MatTextField>
+                                                        </div>
+                                                    </div>
+                                                    @if (_role.Equals("Trainer"))
+                                                    {
+                                                        <div class="col-12 my-3">
+                                                            <MatH5>Physical Information</MatH5>
+                                                        </div>
+                                                        <div class="col-lg-6 mb-2 my-2">
+                                                            <div class="form-group">
+                                                                <MatTextField Type="number" min="10" step="0.1" @bind-Value="_postModel.PersonalInfo.Weight" Icon="@MatIconNames.Line_weight" Outlined="true" Label="Weight" Required="true">kg</MatTextField>
+                                                                <ValidationMessage For="@(() => _postModel.PersonalInfo.Weight)" class="text-danger" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 mb-2 my-2">
+                                                            <div class="form-group">
+                                                                <MatTextField Type="number" min="2" step="0.1" @bind-Value="_postModel.PersonalInfo.Height" Icon="@MatIconNames.Vertical_align_top" Outlined="true" Label="Height" Required="true">feet</MatTextField>
+                                                                <ValidationMessage For="@(() => _postModel.PersonalInfo.Height)" class="text-danger" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 mb-2 my-2">
+                                                            <div class="form-group">
+                                                                <MatTextField Type="number" @bind-Value="_postModel.PersonalInfo.YearsAsTraining"
+                                                                              min="0" step="0.5" Outlined="true" Icon="@MatIconNames.Line_weight"
+                                                                              Required="true" Label="Years in Training">Yrs</MatTextField>
+                                                                <ValidationMessage class="text-danger"
+                                                                                   For="@(() => _postModel.PersonalInfo.YearsAsTraining)" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 mb-2 my-2">
+                                                            <div class="form-group">
+                                                                <MatTextField Type="number" @bind-Value="_postModel.PersonalInfo.YearsOfExperience"
+                                                                              min="0" step="0.5" Required="true" Outlined="true"
+                                                                              Icon="@MatIconNames.Vertical_align_top"
+                                                                              Label="Years of Experience">Yrs</MatTextField>
+                                                                <ValidationMessage class="text-danger"
+                                                                                   For="@(() => _postModel.PersonalInfo.YearsOfExperience)" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6 mb-2 my-2">
+                                                            <div class="form-group">
+                                                                <MatTextField Type="number" Required="true" Outlined="true"
+                                                                              @bind-Value="_postModel.TrainerComfortZone.WillingToTravel"
+                                                                              min="0" step="0.5" Icon="@MatIconNames.Line_weight"
+                                                                              Label="Willing to Travel">km</MatTextField>
+                                                                <ValidationMessage class="text-danger"
+                                                                                   For="@(() => _postModel.TrainerComfortZone.WillingToTravel)" />
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    <div class="col-12 my-3">
+                                                        <MatH5>Preferences</MatH5>
+                                                    </div>
+                                                    <div class="col-lg-6 col-sm-12 mb-2 my-2">
+                                                        <div class="form-group">
+                                                            <MatTextField Type="number" Required="true" Outlined="true"
+                                                                          @bind-Value="_postModel.PersonalInfo.MinPrice"
+                                                                          min="0" step="0.5" Icon="@MatIconNames.Money"
+                                                                          Label="Minimum Fee">ر.س.</MatTextField>
+                                                            <ValidationMessage class="text-danger"
+                                                                               For="@(()=>_postModel.PersonalInfo.MinPrice)" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-sm-12 mb-2 my-2">
+                                                        <div class="form-group">
+                                                            <MatTextField Type="number" Required="true" Outlined="true"
+                                                                          @bind-Value="_postModel.PersonalInfo.MaxPrice"
+                                                                          min="@_postModel.PersonalInfo.MinPrice" step="0.5"
+                                                                          Icon="@MatIconNames.Money"
+                                                                          Label="Maximum Fee">ر.س.</MatTextField>
+                                                            <ValidationMessage class="text-danger"
+                                                                               For="@(()=>_postModel.PersonalInfo.MaxPrice)" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-sm-12 mb-2 my-2">
+                                                        <div class="form-group">
+                                                            <MatSelect @bind-Value="_postModel.WorkRateAs" Icon="@MatIconNames.Filter_list"
+                                                                       Outlined="true" Label="Work Rate As">
+                                                                <MatOptionString Value="Hourly">Hourly</MatOptionString>
+                                                                <MatOptionString Value="Daily">Daily</MatOptionString>
+                                                                <MatOptionString Value="Monthly">Monthly</MatOptionString>
+                                                                <MatOptionString Value="Yearly">Yearly</MatOptionString>
+                                                            </MatSelect>
+                                                            <ValidationMessage class="text-danger" For="@(()=>_postModel.WorkRateAs)" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12"></div>
+                                                    <AuthorizeView Roles="Trainer">
+                                                        <Authorized Context="c">
+                                                            <div class="col-lg-3 col-md-4 col-sm-12 mb-2">
+                                                                <div class="form-group">
+                                                                    <MatSlideToggle @bind-Value="_postModel.PersonalInfo.GroupTrainer" Label="Group Trainer"></MatSlideToggle>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-4 col-sm-12 mb-2">
+                                                                <div class="form-group">
+                                                                    <MatSlideToggle @bind-Value="_postModel.PersonalInfo.PrivateTrainer" Label="Private Trainer"></MatSlideToggle>
+                                                                </div>
+                                                            </div>
+                                                        </Authorized>
+                                                    </AuthorizeView>
+                                                    @if (_role.Equals("Trainer"))
+                                                    {
+                                                        <div class="col-12 my-3">
+                                                            <MatH5>Criminal Information</MatH5>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-4 col-sm-12 mb-2">
+                                                            <div class="form-group">
+                                                                <MatSlideToggle @bind-Value="_postModel.PersonalInfo.EverConvicted" Label="Ever Convicted ?"></MatSlideToggle>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-4 col-sm-12 mb-2">
+                                                            <div class="form-group">
+                                                                <MatSlideToggle @bind-Value="_postModel.PersonalInfo.GulfCitizen" Label="Gulf Citizen ?"></MatSlideToggle>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-4 col-sm-12 mb-2">
+                                                            <div class="form-group">
+                                                                <MatSlideToggle @bind-Value="_postModel.PersonalInfo.AllowedToWork" Disabled="_postModel.PersonalInfo.GulfCitizen" Label="Allowed to work in Gulf ?"></MatSlideToggle>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    <div class="col-lg-12 mb-3 my-2">
+                                                        <div class="form-group">
+                                                            <MatTextField TextArea="true" @bind-Value="_postModel.PersonalInfo.AboutMySelf" Outlined="true" Label="@(_role.Equals("Trainer") ? "About MySelf" : "About Gym")"></MatTextField>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <MatIconButton Disabled="true" Icon="@MatIconNames.Arrow_back" Style="color:#6200EE;font-size:60px"></MatIconButton>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <MatIconButton OnClick="NextTab" Icon="@MatIconNames.Arrow_back" Class="float-right" Style="color:#6200EE;transform: rotate(180deg);"></MatIconButton>
+                                                    </div>
+                                                </div>
+
+</MatTab>
+                                    <MatTab Label="Contact Info" @onclick="@(() => ChangeTab(1))">
+                                        @if (!string.IsNullOrEmpty(_contactInfoMessage))
+                                        {
+                                            <span class="text-danger text-center mt-3">@_contactInfoMessage</span>
+                                        }
+                                        <div class="row mt-5">
+                                            <div class="col-lg-6 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField @bind-Value="_postModel.Contact.PhoneNumber" Outlined="true" Icon="@MatIconNames.Phone" Label="Phone Number"></MatTextField>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Type="email" @bind-Value="_postModel.Contact.Email" Outlined="true" Icon="@MatIconNames.Alternate_email" Label="Email"></MatTextField>
+                                                    <ValidationMessage For="@(() => _postModel.Contact.Email)" class="text-danger" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField @bind-Value="_postModel.Contact.LinkedInUrl" Outlined="true" Icon="@MatIconNames.Insert_link" Label="LinkedIn Url"></MatTextField>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField @bind-Value="_postModel.Contact.FaceBookUrl" Outlined="true" Icon="@MatIconNames.Insert_link" Label="Facebook Url"></MatTextField>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 mb-2">
+                                                <div class="form-group">
+                                                    @if (_getModel.Countries != null)
+                                                    {
+                                                        <MatSelect Value="_postModel.Contact.CountryId"
+                                                                   ValueExpression="@(()=>_postModel.Contact.CountryId)"
+                                                                   ValueChanged="(Guid e)=>SetCountry(e)"
+                                                                   TValue="Guid" Outlined="true"
+                                                                   Icon="@MatIconNames.Flag" Label="Country">
+                                                            @foreach (var item in _getModel.Countries)
+                                                            {
+                                                                <MatOption TValue="Guid" Value="item.Id">@item.Name</MatOption>
+                                                            }
+                                                        </MatSelect>
+                                                        if (!string.IsNullOrEmpty(_countryMessage))
+                                                        {
+                                                            <span class="text-danger">@_countryMessage</span>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 mb-2">
+                                                <div class="form-group">
+                                                    @if (_states != null)
+                                                    {
+                                                        <MatSelect Value="_postModel.Contact.StateId"
+                                                                   ValueExpression="@(() => _postModel.Contact.StateId)"
+                                                                   ValueChanged="(Guid e) => SetState(e)"
+                                                                   TValue="Guid" Outlined="true"
+                                                                   Icon="@MatIconNames.Outlined_flag" Label="State">
+                                                            @foreach (var item in _states)
+                                                            {
+                                                                <MatOption TValue="Guid" Value="item.StateId">@item.StateName</MatOption>
+                                                            }
+                                                        </MatSelect>
+                                                        if (!string.IsNullOrEmpty(_stateMessage))
+                                                        {
+                                                            <span class="text-danger">@_stateMessage</span>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 mb-2">
+                                                <div class="form-group">
+                                                    @if (_cities != null)
+                                                    {
+                                                        <MatSelect Value="_postModel.Contact.CityId"
+                                                                   ValueExpression="@(() => _postModel.Contact.CityId)"
+                                                                   ValueChanged="(Guid e) => SetCity(e)"
+                                                                   TValue="Guid" Outlined="true"
+                                                                   Icon="@MatIconNames.Location_city" Label="City">
+                                                            @foreach (var item in _cities)
+                                                            {
+                                                                <MatOption TValue="Guid" Value="item.Id">@item.CityName</MatOption>
+                                                            }
+                                                        </MatSelect>
+                                                        if (!string.IsNullOrEmpty(_cityMessage))
+                                                        {
+                                                            <span class="text-danger">@_cityMessage</span>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 mb-2">
+                                                <div class="form-group">
+                                                    @if (_districts != null)
+                                                    {
+                                                        <MatSelect Value="_postModel.Contact.DistrictId"
+                                                                   ValueExpression="@(() => _postModel.Contact.DistrictId)"
+                                                                   ValueChanged="(Guid e) => SetDistrict(e)"
+                                                                   TValue="Guid" Outlined="true"
+                                                                   Icon="@MatIconNames.Location_city" Label="District">
+                                                            @foreach (var item in _districts)
+                                                            {
+                                                                <MatOption TValue="Guid" Value="item.Id">@item.Name</MatOption>
+                                                            }
+                                                        </MatSelect>
+                                                        if (!string.IsNullOrEmpty(_districtMessage))
+                                                        {
+                                                            <span class="text-danger">@_districtMessage</span>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField @bind-Value="_postModel.Contact.ZipCode" Outlined="true"
+                                                                  Required="true" Icon="@MatIconNames.Person_pin" Label="Zip Code"></MatTextField>
+                                                    <ValidationMessage class="text-danger" For="@(()=>_postModel.Contact.ZipCode)" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField @bind-Value="_postModel.Contact.Address" Outlined="true"
+                                                                  Required="true"
+                                                                  Icon="@MatIconNames.Place" Label="Address"></MatTextField>
+                                                    <ValidationMessage class="text-danger" For="@(()=>_postModel.Contact.Address)" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <MatIconButton OnClick="()=>PreviousTab(0)" Icon="@MatIconNames.Arrow_back" Class="float-left" Style="color:#6200EE"></MatIconButton>
+                                            </div>
+                                            <div class="col-6">
+                                                <MatIconButton OnClick="@NextTab" Icon="@MatIconNames.Arrow_back" Class="float-right" Style="color:#6200EE;transform: rotate(180deg);"></MatIconButton>
+                                            </div>
+                                        </div>
+
+                                    </MatTab>
+                                    <MatTab Label="Business Hours" @onclick="@(() => ChangeTab(2))">
+                                        <div class="row mt-5">
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <h4>Monday *</h4>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.FromMonday"
+                                                                  ValueChanged="@((string e) => FromMonday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.FromMonday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="From"></MatTextField>
+                                                </div>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.ToMonday"
+                                                                  ValueChanged="@((string e) => ToMonday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.ToMonday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="To"></MatTextField>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-5">
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <h4>Tuesday *</h4>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.FromTuesday"
+                                                                  ValueChanged="@((string e) => FromTuesday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.FromTuesday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="From"></MatTextField>
+                                                </div>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.ToTuesday"
+                                                                  ValueChanged="@((string e) => ToTuesday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.ToTuesday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="To"></MatTextField>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-5">
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <h4>Wednesday *</h4>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.FromWednesday"
+                                                                  ValueChanged="@((string e) => FromWednesday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.FromWednesday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="From"></MatTextField>
+                                                </div>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.ToWednesday"
+                                                                  ValueChanged="@((string e) => ToWednesday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.ToWednesday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="To"></MatTextField>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-5">
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <h4>Thursday *</h4>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.FromThursday"
+                                                                  ValueChanged="@((string e) => FromThursday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.FromThursday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="From"></MatTextField>
+                                                </div>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.ToThursday"
+                                                                  ValueChanged="@((string e) => ToThursday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.ToThursday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="To"></MatTextField>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-5">
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <h4>Friday *</h4>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.FromFriday"
+                                                                  ValueChanged="@((string e) => FromFriday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.FromFriday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="From"></MatTextField>
+                                                </div>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.ToFriday"
+                                                                  ValueChanged="@((string e) => ToFriday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.ToFriday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="To"></MatTextField>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-5">
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <h4>Saturday *</h4>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.FromSaturday"
+                                                                  ValueChanged="@((string e) => FromSaturday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.FromSaturday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="From"></MatTextField>
+                                                </div>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.ToSaturday"
+                                                                  ValueChanged="@((string e) => ToSaturday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.ToSaturday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="To"></MatTextField>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-5">
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <h4>Sunday *</h4>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.FromSunday"
+                                                                  ValueChanged="@((string e) => FromSunday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.FromSunday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="From"></MatTextField>
+                                                </div>
+                                            </div>
+                                            <div class="col-4 col-sm-3 mb-2">
+                                                <div class="form-group">
+                                                    <MatTextField Value="_postModel.TimeSlot.ToSunday"
+                                                                  ValueChanged="@((string e) => ToSunday(e))"
+                                                                  ValueExpression="@(() => _postModel.TimeSlot.ToSunday)"
+                                                                  Outlined="true" Required="true" Type="time" Label="To"></MatTextField>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <MatIconButton OnClick="()=>PreviousTab(1)" Icon="@MatIconNames.Arrow_back" Style="color:#6200EE"></MatIconButton>
+                                            </div>
+                                            <div class="col-6">
+                                                <MatIconButton OnClick="@NextTab" Icon="@MatIconNames.Arrow_back" Class="float-right" Style="color:#6200EE;transform: rotate(180deg);"></MatIconButton>
+                                            </div>
+                                        </div>
+                                    </MatTab>
+                                    <MatTab Label="Skills" @onclick="@(() => ChangeTab(3))">
+                                        @if (!string.IsNullOrEmpty(_skillInfoMessage))
+                                        {
+                                            <span class="text-danger text-center mt-3">@_skillInfoMessage</span>
+                                        }
+                                        <div class="row mt-5">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <h4 class="mb-4">Choose At least One.</h4>
+                                                    @if (_getModel != null)
+                                                    {
+                                                        <div class="row mt-5">
+                                                            @if (_skills == null)
+                                                            {
+                                                                <MiniLoader />
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="col-6 col1">
+                                                                    @if (_skills.Count == 0 && _postModel.Skills.Count == 0)
+                                                                    {
+                                                                        <h4 class="alert alert-primary">No Skills are Found</h4>
+                                                                    }
+                                                                    else if (_skills.Count == 0)
+                                                                    {
+                                                                        <h4 class="alert alert-info text-center">All Skills are Selected <i class="far fa-thumbs-up mx-2"></i></h4>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <h5 class="mb-3">Skills</h5>
+                                                                        <ul class="list-group">
+                                                                            <Virtualize Items="_skills" Context="item">
+                                                                                <li class="list-group-item">
+                                                                                    <button type="button"
+                                                                                            @onclick="@(() => AddSkill(item.Id, item.Name))"
+                                                                                            class="btn btn-primary btn-custom-p"
+                                                                                            style="height:100%;width:100%;padding:10px 10px">
+                                                                                        @item.Name
+                                                                                        <i class="far fa-plus-square float-right"></i>
+                                                                                    </button>
+                                                                                </li>
+                                                                            </Virtualize>
+                                                                        </ul>
+                                                                    }
+                                                                </div>
+                                                            }
+                                                            <div class="col-6 col2">
+                                                                @if (_postModel.Skills.Count == 0)
+                                                                {
+                                                                    <h4 class="alert alert-info">No Skill is Selected. At least Choose one</h4>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <h5 class="mb-3">Selected Skills</h5>
+                                                                    <ul class="list-group">
+                                                                        <Virtualize Items="_postModel.Skills" ItemSize="10" Context="item">
+                                                                            <li class="list-group-item">
+                                                                                <button type="button"
+                                                                                        @onclick="@(() => RemoveSkill(item.Id, item.Name))"
+                                                                                        class="btn btn-success btn-custom-s"
+                                                                                        style="height:100%;width:100%;padding:10px 10px">
+                                                                                    @item.Name
+                                                                                    <i class="far fa-minus-square float-right"></i>
+                                                                                </button>
+                                                                            </li>
+                                                                        </Virtualize>
+                                                                    </ul>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <MatTextField Type="text" @bind-Value="_newSkill" Class="my-3"
+                                                                      @onkeydown="AddSkillWithEnter" OnInput="(e)=>SetSkill(e.Value.ToString())"
+                                                                      Label="Add New" Outlined="true">
+                                                            <MatIconButton Icon="@MatIconNames.Add" OnClick="AddNewSkill"></MatIconButton>
+                                                        </MatTextField>
+                                                    }
+                                                    else
+                                                    {
+                                                        <Loader />
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <MatIconButton OnClick="()=>PreviousTab(2)" Icon="@MatIconNames.Arrow_back" Style="color:#6200EE"></MatIconButton>
+                                            </div>
+                                            <div class="col-6">
+                                                <MatIconButton OnClick="@NextTab" Icon="@MatIconNames.Arrow_back" Class="float-right" Style="color:#6200EE;transform: rotate(180deg);"></MatIconButton>
+                                            </div>
+                                        </div>
+                                    </MatTab>
+                                    <MatTab Label="Certifications" @onclick="@(() => ChangeTab(4))">
+                                        @if (!string.IsNullOrEmpty(_certificationInfoMessage))
+                                        {
+                                            <span class="text-danger text-center mt-3">@_certificationInfoMessage</span>
+                                        }
+                                        <div class="row mt-5">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <h4 class="mb-4">Choose At least One. <MatButton Type="submit" Icon="@MatIconNames.Save" Raised="true" Class="float-right">Save</MatButton></h4>
+                                                    @if (_getModel != null)
+                                                    {
+                                                        <div class="row mt-5">
+                                                            @if (_certifications == null)
+                                                            {
+                                                                <MiniLoader />
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="col-6 col1">
+                                                                    @if (_certifications.Count == 0 && _postModel.Certifications.Count == 0)
+                                                                    {
+                                                                        <h4 class="alert alert-primary">No Certifications are Found</h4>
+                                                                    }
+                                                                    else if (_certifications.Count == 0)
+                                                                    {
+                                                                        <h4 class="alert alert-info text-center">All Certifications are Selected <i class="far fa-thumbs-up mx-2"></i></h4>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <h5 class="mb-3">Certifications</h5>
+                                                                        <ul class="list-group">
+                                                                            <Virtualize Items="_certifications" ItemSize="10" Context="item">
+                                                                                <li class="list-group-item">
+                                                                                    <button type="button"
+                                                                                            @onclick="@(() => AddCertification(item.Id, item.Name))"
+                                                                                            class="btn btn-primary btn-custom-p"
+                                                                                            style="height:100%;width:100%;padding:10px 10px">
+                                                                                        @item.Name
+                                                                                        <i class="far fa-plus-square float-right"></i>
+                                                                                    </button>
+                                                                                </li>
+                                                                            </Virtualize>
+                                                                        </ul>
+                                                                    }
+                                                                </div>
+                                                            }
+                                                            <div class="col-6 col2">
+                                                                @if (_postModel.Certifications.Count == 0)
+                                                                {
+                                                                    <h4 class="alert alert-info">No Certification is Selected. At least Choose one</h4>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <h5 class="mb-3">Selected Certificates</h5>
+                                                                    <ul class="list-group">
+                                                                        <Virtualize Items="_postModel.Certifications" Context="item">
+                                                                            <li class="list-group-item">
+                                                                                <button type="button"
+                                                                                        @onclick="@(() => RemoveCertification(item.Id, item.Name))"
+                                                                                        class="btn btn-success btn-custom-s"
+                                                                                        style="height:100%;width:100%;padding:10px 10px">
+                                                                                    @item.Name
+                                                                                    <i class="far fa-minus-square float-right"></i>
+                                                                                </button>
+                                                                            </li>
+                                                                        </Virtualize>
+                                                                    </ul>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                                <MatTextField Type="text" @bind-Value="_newCertification" Class="my-3"
+                                                              @onkeydown="AddCertificationWithEnter" OnInput="(e)=>SetCertification(e.Value.ToString())"
+                                                              Label="Add New" Outlined="true">
+                                                    <MatIconButton Icon="@MatIconNames.Add" OnClick="AddNewCertification"></MatIconButton>
+                                                </MatTextField>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <MatIconButton OnClick="()=>PreviousTab(3)" Icon="@MatIconNames.Arrow_back" Style="color:#6200EE"></MatIconButton>
+                                            </div>
+                                            <div class="col-6">
+                                                <MatIconButton OnClick="@NextTab" Disabled="true" Icon="@MatIconNames.Arrow_back" Class="float-right" Style="color:#6200EE;transform: rotate(180deg);"></MatIconButton>
+                                            </div>
+                                        </div>
+                                    </MatTab>
+                                </MatTabGroup>
+                            }
+                            else
+                            {
+                                <Loader />
+                            }
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- row -->
+</div>
+
+@code
+{
+    public int tabIndex = 0;
+
+    void PreviousTab(int i)
+    {
+        //if (tabIndex >= i)
+        //{
+        tabIndex = tabIndex <= 4 ? tabIndex - 1 : 0;
+        //}
+        //else
+        //{
+        //    if (tabIndex == 0)
+        //    {
+        //        if (ValidatePersonalInfo())
+        //        {
+        //            tabIndex = tabIndex <= 4 ? tabIndex - 1 : 0;
+        //        }
+        //    }
+        //    else if (tabIndex == 1)
+        //    {
+        //        if (ValidateContactInfo())
+        //        {
+        //            tabIndex = tabIndex <= 4 ? tabIndex - 1 : 0;
+        //        }
+        //    }
+        //    else if (tabIndex == 2)
+        //    {
+        //        tabIndex = tabIndex <= 4 ? tabIndex - 1 : 0;
+        //    }
+        //    else if (tabIndex == 3)
+        //    {
+        //        if (ValidateSkill())
+        //        {
+        //            tabIndex = tabIndex <= 4 ? tabIndex - 1 : 0;
+        //        }
+        //    }
+        //    else if (tabIndex == 4)
+        //    {
+        //        if (ValidateCertification())
+        //        {
+        //            tabIndex = tabIndex <= 4 ? tabIndex - 1 : 0;
+        //        }
+        //    }
+        //}
+    }
+
+    void NextTab(MouseEventArgs e)
+    {
+        if (tabIndex == 0)
+        {
+            if (ValidatePersonalInfo())
+            {
+                tabIndex = tabIndex <= 4 ? tabIndex + 1 : 0;
+            }
+        }
+        else if (tabIndex == 1)
+        {
+            if (ValidateContactInfo())
+            {
+                tabIndex = tabIndex <= 4 ? tabIndex + 1 : 0;
+            }
+        }
+        else if (tabIndex == 2)
+        {
+            tabIndex = tabIndex <= 4 ? tabIndex + 1 : 0;
+        }
+        else if (tabIndex == 3)
+        {
+            if (ValidateSkill())
+            {
+                tabIndex = tabIndex <= 4 ? tabIndex + 1 : 0;
+            }
+        }
+        else if (tabIndex == 4)
+        {
+            if (ValidateCertification())
+            {
+                tabIndex = tabIndex <= 4 ? tabIndex + 1 : 0;
+            }
+        }
+    }
+
+    void ChangeTab(int i)
+    {
+        if (tabIndex == 0)
+        {
+            if (ValidatePersonalInfo())
+            {
+                tabIndex = i;
+            }
+            else
+            {
+
+            }
+        }
+        else if (tabIndex == 1)
+        {
+            if (ValidateContactInfo())
+            {
+                tabIndex = i;
+            }
+        }
+        else if (tabIndex == 2)
+        {
+            tabIndex = i;
+
+        }
+        else if (tabIndex == 3)
+        {
+            if (ValidateSkill())
+            {
+                tabIndex = i;
+            }
+        }
+        else if (tabIndex == 4)
+        {
+            if (ValidateCertification())
+            {
+                tabIndex = i;
+            }
+        }
+    }
+
+    MatTheme theme1 = new MatTheme()
+    {
+        Secondary = "#5d2f91"
+    };
+}
+
+
+
+

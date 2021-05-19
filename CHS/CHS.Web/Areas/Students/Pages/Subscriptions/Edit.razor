@@ -1,0 +1,71 @@
+﻿@page "/Subscriptions/Edit/{Id:guid}"
+
+<div class="container-fluid">
+    <div class="page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="Subscriptions/List">Subscriptions</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Edit</a></li>
+        </ol>
+    </div>
+    @if (_model == null)
+    {
+        <Loader />
+    }
+    else
+    {
+        <EditForm Model="_model" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+
+            <div class="row">
+                <div class="col-xl-6 col-sm-12 my-3">
+                    <MatTextField @bind-Value="_model.Name" Type="text" Required="true" Label="Name" Outlined="true"
+                                  @onfocusout="ValidateName" Icon="@MatIconNames.Label"></MatTextField>
+                    @if (!string.IsNullOrEmpty(_nameMessage))
+                    {
+                        <span class="text-danger">@_nameMessage</span>
+                    }
+                </div>
+                <div class="col-xl-6 col-sm-12 my-3">
+                    <MatTextField @bind-Value="_model.Price" Outlined="true" Required="true" Label="Price"
+                                  Type="number" min="1" step="0.1" max="@int.MaxValue" Icon="@MatIconNames.Money"></MatTextField>
+                </div>
+                <div class="col-xl-6 col-sm-12 my-3">
+                    <MatTextField @bind-Value="_model.SubscriptionMonths" Type="number" Label="Subscription Months" min="0.5" step="0.5"
+                                  Outlined="true" Icon="@MatIconNames.Accessibility"></MatTextField>
+                </div>
+                @if (_role.Equals("Trainer"))
+                {
+                    <div class="col-xl-6 col-sm-12 my-3">
+
+                        <label>Training Days</label>
+                        @if (!string.IsNullOrEmpty(_model.TrainingDays))
+                        {
+                            <MatChipSet Style="flex-wrap:nowrap">
+                                @foreach (var item in _model.TrainingDays.Trim().Split(','))
+                                {
+                                    <MatChip Label="@item"></MatChip>
+                                }
+                            </MatChipSet>
+                        }
+                        else
+                        {
+                            <MatH6 Class="alert alert-info">No Day was selected</MatH6>
+                        }
+                    </div>
+                    <div class="col-xl-6 col-sm-12 my-3">
+                        <MatTextField Type="time" @bind-Value="_model.TrainingTiming" Icon="@MatIconNames.Timer"></MatTextField>
+                    </div>
+                }
+                <div class="col-xl-6 col-sm-12 my-3">
+                    <MatTextField @bind-Value="_model.Detail" Type="text" Label="Detail" rows="6" PlaceHolder="Optional..."
+                                  TextArea="false" Outlined="true"></MatTextField>
+                </div>
+                <div class="col-xl-6 col-sm-12 my-3">
+                    <MatIconButton type="submit" title="Save" Class="add" Icon="@MatIconNames.Save_alt" Disabled="_disable" Style="color:#40189D"></MatIconButton>
+                </div>
+            </div>
+        </EditForm>
+    }
+</div>
+

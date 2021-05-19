@@ -1,0 +1,735 @@
+﻿@page "/Profile"
+@page "/Profile/{Id:guid?}"
+
+<div class="container-fluid animated animate__slideInLeft">
+    <div class="page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Home">Home</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Profile</a></li>
+        </ol>
+    </div>
+    <!-- row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="profile card card-body px-3 pt-3 pb-0">
+                @if (_profile == null)
+                {
+                    <Ellipsis />
+                }
+                else
+                {
+                    <div class="profile-head">
+                        <div class="photo-content">
+                            @*<div class="cover-photo"></div>*@
+                            <div class="cover-photo"
+                                 style="background:url(@_profile.CoverPicture);background-size: cover;background-repeat:no-repeat;background-position:center center;min-height:250px;width:100%;"></div>
+                            @*<div class="cover-photo" style="background:url(Images/profile.jpg);background-size: cover;background-position:center;min-height:250px;width:100%;"></div>*@
+                        </div>
+                        <div class="profile-info">
+                            <div class="profile-photo">
+                                <img src="@_profile.ProfilePicture" class="img-fluid rounded-circle" alt="Profile">
+                            </div>
+                            <div class="profile-details">
+                                <div class="profile-name px-3 pt-2">
+                                    <h4 class="text-primary mb-0">@_profile.FullName</h4>
+                                    <p>@_profile.Designation</p>
+                                </div>
+                                <div class="profile-email px-2 pt-2">
+                                    <h4 class="text-muted mb-0">@_profile.Email</h4>
+                                    <p>Email</p>
+                                </div>
+                                <div class="dropdown ml-auto">
+                                    <a href="#" class="btn btn-primary light sharp" data-toggle="dropdown" aria-expanded="true"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="5" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="19" cy="12" r="2"></circle></g></svg></a>
+
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <AuthorizeView Roles="Gym,Trainer">
+                                            <Authorized>
+                                                @if (_isOwner)
+                                                {
+                                                    if (_profile.ProfilePicture.Equals("Images/profile.png"))
+                                                    {
+                                                        <li class="dropdown-item p-0">
+                                                            <a onclick="imageUpload('profile-upload')" href="javascript:void()" class="d-block padding">
+                                                                <i class="fa fa-user text-primary mr-2"></i> Change profile
+                                                            </a>
+                                                            <InputFile id="profile-upload" OnChange="@((e)=>OnChangeProfilePicture(e))" accept="image/*" hidden></InputFile>
+                                                        </li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li class="dropdown-item p-0">
+                                                            <a @onclick="RemoveProfile" href="javascript:void()" class="d-block padding">
+                                                                <i class="fa fa-user text-primary mr-2"></i> Remove profile
+                                                            </a>
+                                                        </li>
+                                                    }
+
+                                                    @if (_profile.CoverPicture.Equals("Images/cover.jpg"))
+                                                    {
+                                                        <li class="dropdown-item p-0">
+                                                            <a onclick="imageUpload('cover-upload')" href="javascript:void()" class="d-block padding">
+                                                                <i class="fa fa-user-circle text-primary mr-2"></i> Change Cover
+                                                            </a>
+                                                            <InputFile id="cover-upload" OnChange="@((e)=>OnChangeCoverPicture(e))" accept="image/*" hidden></InputFile>
+                                                        </li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li class="dropdown-item p-0">
+                                                            <a @onclick="RemoveCover" href="javascript:void()" class="d-block padding">
+                                                                <i class="fa fa-user-circle text-primary mr-2"></i> Remove Cover
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+                                            </Authorized>
+                                        </AuthorizeView>
+                                        @*<li class="dropdown-item p-0">
+                                                <a href="javascript:void()" class="d-block padding">
+                                                    <i class="fa fa-users text-primary mr-2"></i> Add to close friends
+                                                </a>
+                                            </li>
+                                            <li class="dropdown-item p-0">
+                                                <a href="javascript:void()" class="d-block padding">
+                                                    <i class="fa fa-plus text-primary mr-2"></i> Add to group
+                                                </a>
+                                            </li>*@
+                                        <li class="dropdown-item p-0">
+                                            <a href="javascript:void()" class="d-block padding">
+                                                <i class="fa fa-ban text-primary mr-2"></i> Block
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="card h-auto">
+                <div class="card-body">
+                    <div class="profile-statistics mb-5">
+                        <div class="text-center">
+                            @if (_profile == null)
+                            {
+                                <Ellipsis />
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="m-b-0">@_profile.Followers</h3><span>Follower</span>
+                                    </div>
+                                    <div class="col">
+                                        <h3 class="m-b-0">@_profile.Followings</h3><span>Following</span>
+                                    </div>
+                                    @*<div class="col">
+                                            <button type="button" class="btn btn-outline-primary"><i class="far fa-comments"></i></button>
+                                        </div>*@
+                                </div>
+                                if (Id != null && Id != default)
+                                {
+                                    <div class="mt-4">
+                                        @if (_profile.IsFollowThisUser)
+                                        {
+                                            <button type="button" class="btn btn-info mb-1 mr-1" @onclick="@(()=>UnFollow(Id))">UnFollow</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-primary mb-1 mr-1" @onclick="@(()=>Follow(Id))">Follow</button>
+                                        }
+                                        @*<button type="button" class="btn btn-primary mb-1"><i class="far fa-comments"></i> Send Message</button>*@
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="profile-blog mb-5">
+                        <h5 class="text-primary d-inline">Today Highlights</h5><a href="javascript:void()" class="pull-right f-s-16">More</a>
+                        <img src="Jobie/images/profile/1.jpg" alt="" class="img-fluid mt-4 mb-4 w-100">
+                        <h4>Darwin Creative Agency Theme</h4>
+                        <p class="mb-0">A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
+                    </div>
+                    @*<div class="profile-interest mb-5">
+                            <h5 class="text-primary d-inline">Interest</h5>
+                            <div class="row mt-4">
+                                <div class="col-lg-4 col-xl-4 col-sm-4 col-6 int-col">
+                                    <a href="javascript:void()" class="interest-cat">
+                                        <img src="Jobie/images/profile/2.jpg" alt="" class="img-fluid">
+                                        <p>Shopping Mall</p>
+                                    </a>
+                                </div>
+                                <div class="col-lg-4 col-xl-4 col-sm-4 col-6 int-col">
+                                    <a href="javascript:void()" class="interest-cat">
+                                        <img src="Jobie/images/profile/3.jpg" alt="" class="img-fluid">
+                                        <p>Photography</p>
+                                    </a>
+                                </div>
+                                <div class="col-lg-4 col-xl-4 col-sm-4 col-6 int-col">
+                                    <a href="javascript:void()" class="interest-cat">
+                                        <img src="Jobie/images/profile/4.jpg" alt="" class="img-fluid">
+                                        <p>Art &amp; Gallery</p>
+                                    </a>
+                                </div>
+                                <div class="col-lg-4 col-xl-4 col-sm-4 col-6 int-col">
+                                    <a href="javascript:void()" class="interest-cat">
+                                        <img src="Jobie/images/profile/2.jpg" alt="" class="img-fluid">
+                                        <p>Visiting Place</p>
+                                    </a>
+                                </div>
+                                <div class="col-lg-4 col-xl-4 col-sm-4 col-6 int-col">
+                                    <a href="javascript:void()" class="interest-cat">
+                                        <img src="Jobie/images/profile/3.jpg" alt="" class="img-fluid">
+                                        <p>Shopping</p>
+                                    </a>
+                                </div>
+                                <div class="col-lg-4 col-xl-4 col-sm-4 col-6 int-col">
+                                    <a href="javascript:void()" class="interest-cat">
+                                        <img src="Jobie/images/profile/4.jpg" alt="" class="img-fluid">
+                                        <p>Biking</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>*@
+                    @*<div class="profile-news">
+                            <h5 class="text-primary d-inline">Our Latest News</h5>
+                            <div class="media pt-3 pb-3">
+                                <img src="Jobie/images/profile/5.jpg" alt="image" class="mr-3 rounded" width="75">
+                                <div class="media-body">
+                                    <h5 class="m-b-5">Collection of textile samples</h5>
+                                    <p class="mb-0">I shared this on my fb wall a few months back, and I thought.</p>
+                                </div>
+                            </div>
+                            <div class="media pt-3 pb-3">
+                                <img src="Jobie/images/profile/6.jpg" alt="image" class="mr-3 rounded" width="75">
+                                <div class="media-body">
+                                    <h5 class="m-b-5">Collection of textile samples</h5>
+                                    <p class="mb-0">I shared this on my fb wall a few months back, and I thought.</p>
+                                </div>
+                            </div>
+                            <div class="media pt-3 pb-3">
+                                <img src="Jobie/images/profile/7.jpg" alt="image" class="mr-3 rounded" width="75">
+                                <div class="media-body">
+                                    <h5 class="m-b-5">Collection of textile samples</h5>
+                                    <p class="mb-0">I shared this on my fb wall a few months back, and I thought.</p>
+                                </div>
+                            </div>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="profile-tab">
+                        <div class="custom-tab-1">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item">
+                                    <a href="#my-posts" data-toggle="tab" class="nav-link active show">Posts</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#about-me" @onclick="AboutMe" data-toggle="tab" class="nav-link">@(_isOwner ? "About Me" : "About")</a>
+                                </li>
+                                <AuthorizeView Roles="Gym,Trainer">
+                                    <Authorized>
+                                        @*@if (Id == null)
+                                            {
+                                                <li class="nav-item">
+                                                    <a href="#profile-settings" @onclick="ProfileSetting" data-toggle="tab" class="nav-link">Setting</a>
+                                                </li>
+                                            }*@
+                                        @if (_role.Equals("Gym"))
+                                        {
+                                            <li class="nav-item">
+                                                <a href="#profile-Offers" @onclick="Offers" data-toggle="tab" class="nav-link">Offers</a>
+                                            </li>
+                                        }
+                                        else if (_role.Equals("Trainer"))
+                                        {
+                                            <li class="nav-item">
+                                                <a href="#profile-Offers" @onclick="Offers" data-toggle="tab" class="nav-link">Courses</a>
+                                            </li>
+                                        }
+                                    </Authorized>
+                                </AuthorizeView>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="my-posts" class="tab-pane fade active show">
+                                    <div class="my-post-content pt-3">
+                                        <AuthorizeView Roles="Gym,Trainer">
+                                            <Authorized>
+                                                @if (_isOwner)
+                                                {
+                                                    <EditForm Model="_postUpload" Context="chs" enctype="multipart/form-data"
+                                                              OnValidSubmit="HandleValidSubmit">
+                                                        <div class="post-input">
+                                                            <MatTextField @bind-Value="_postUpload.Text" Label="@_label"
+                                                                          Style="background-color:#fafafa !important" rows="6"
+                                                                          TextArea="true" Class="bg-transparent"
+                                                                          @onfocusin="@(() => { _label = "*"; })"
+                                                                          @onfocusout="@(() => { _label = "Say Something..."; })"
+                                                                          PlaceHolder="Please type what you want...."></MatTextField>
+
+                                                            @if (_processing)
+                                                            {
+                                                                <MatProgressBar Class="my-2" Progress="0.35" Buffer="0.7"></MatProgressBar>
+                                                            }
+                                                            else
+                                                            {
+                                                                <!--<div class="d-inline-block mx-1">
+                                                                    <button type="button" onclick="imageUpload('file-upload')" class="btn btn-primary light px-3"><i class="fa fa-link"></i></button>-->
+                                                                @*<InputFile @bind-Value="_postUpload.File" OnChange="OnChangeFile" id="file-upload" accept="application/pdf,application/vnd.ms-excel" hidden></InputFile>*@
+                                                                <!--</div>-->
+
+                                                                <div class="d-inline-block mx-1">
+                                                                    <button type="button" onclick="imageUpload('image-upload')" class="btn btn-primary light mr-1 px-3"><i class="fa fa-camera"></i></button>
+                                                                    <InputFile id="image-upload" OnChange="OnChangePostImage" accept="image/*" hidden></InputFile>
+                                                                </div>
+                                                                <button type="submit" class="btn btn-primary">Post</button>
+                                                            }
+                                                        </div>
+                                                    </EditForm>
+                                                }
+                                            </Authorized>
+                                        </AuthorizeView>
+                                        @if (_profile == null)
+                                        {
+                                            <Loader />
+                                        }
+                                        else
+                                        {
+                                            foreach (var item in _profile.Posts.OrderByDescending(x => x.DateTime))
+                                            {
+                                                <div class="profile-uoloaded-post border-bottom-1 pb-5 post-hover">
+
+                                                    <div class="dropdown post-dropdown" style="position:absolute;right:1.5rem">
+                                                        <a href="#" class="btn btn-primary light sharp" data-toggle="dropdown" aria-expanded="true"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="5" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="19" cy="12" r="2"></circle></g></svg></a>
+                                                        <ul class="dropdown-menu dropdown-menu-right">
+                                                            @if (_isOwner)
+                                                            {
+                                                                <li class="dropdown-item p-0">
+                                                                    <a @onclick="@(()=>EditPost(item.PostId, item.Title))" href="javascript:void()" class="d-block padding">
+                                                                        <i class="far fa-edit text-primary mr-2"></i> Edit
+                                                                    </a>
+                                                                    <InputFile id="profile-upload" OnChange="@((e)=>OnChangeProfilePicture(e))" accept="image/*" hidden></InputFile>
+                                                                </li>
+                                                                <li class="dropdown-item p-0">
+                                                                    <a @onclick="@(()=>DeletePost(item.PostId))" href="javascript:void()" class="d-block padding">
+                                                                        <i class="far fa-trash-alt text-primary mr-2"></i> Delete
+                                                                    </a>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+
+                                                    @if (!string.IsNullOrEmpty(item.Image))
+                                                    {
+                                                        <img src="@item.Image" alt="Image" class="img-fluid img-thumbnail mb-0" style="max-height:400px;">
+                                                        @*<img src="@item.Image" alt="Image" class="img-fluid" style="max-height:400px;width:673px">*@
+                                                    }
+                                                    @*<a class="post-title" href="javascript:void()">
+                                                            <h4>@item.Name</h4>
+                                                        </a>*@
+                                                    @if (!string.IsNullOrEmpty(item.Title))
+                                                    {
+                                                        if (item.InEditMode)
+                                                        {
+                                                            <EditForm Model="_editPost" OnValidSubmit="EditPostSubmit">
+                                                                <MatTextField @onfocusout="ChangePostTitle"
+                                                                              Icon="@MatIconNames.Edit" TextArea="false"
+                                                                              @bind-Value="_editPost.Title">
+                                                                    <MatIconButton type="submit" Icon="@MatIconNames.Cloud_done"
+                                                                                   Style="color:#5c2ad4"></MatIconButton>
+                                                                </MatTextField>
+                                                            </EditForm>
+                                                        }
+                                                        else
+                                                        {
+                                                            <h5 class="alert" style="background:linear-gradient(to top left, #f9f9f9, #f9f9f9);color:#555;margin-top:-10px;border-radius:5px">@item.Title</h5>
+                                                        }
+                                                        @*@item.Detail*@
+                                                        @*@item.Name*@
+                                                    }
+                                                    @if (item.LikedThisPost)
+                                                    {
+                                                        <button class="btn btn-info mr-2" @onclick="@(()=>UnLike(item.PostId))">
+                                                            <span class="mr-2">
+                                                                @if (item.Likes > 0)
+                                                                {
+                                                                    <text>@item.Likes</text>
+                                                                }
+                                                                <i class="ml-1 fa fa-heart"></i>
+                                                            </span>Liked
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button class="btn btn-primary mr-2" @onclick="@(()=>Like(item.PostId))">
+                                                            <span class="mr-2">
+                                                                @if (item.Likes > 0)
+                                                                {
+                                                                    <text>@item.Likes</text>
+                                                                }
+                                                                <i class="ml-1 fa fa-heart"></i>
+                                                            </span>Like
+                                                        </button>
+                                                    }
+                                                    @*<button class="btn btn-secondary">
+                                                            <span class="mr-2">@item.Replies
+                                                                <i class="fa fa-reply"></i>
+                                                            </span>Reply
+                                                        </button>*@
+                                                </div>
+                                            }
+
+                                        }
+                                        <div class="profile-uoloaded-post border-bottom-1 pb-5">
+                                            <img src="Jobie/images/profile/8.jpg" alt="" class="img-fluid">
+                                            <a class="post-title" href="javascript:void()">
+                                                <h4>Collection of textile samples lay spread</h4>
+                                            </a>
+                                            <p>
+                                                A wonderful serenity has take possession of my entire soul like these sweet morning of spare which enjoy whole heart.A wonderful serenity has take possession of my entire soul like these sweet morning
+                                                of spare which enjoy whole heart.
+                                            </p>
+                                            <button class="btn btn-primary mr-2">
+                                                <span class="mr-2">
+                                                    <i class="fa fa-heart"></i>
+                                                </span>Like
+                                            </button>
+                                            <button class="btn btn-secondary">
+                                                <span class="mr-2">
+                                                    <i class="fa fa-reply"></i>
+                                                </span>Reply
+                                            </button>
+                                        </div>
+                                        <div class="text-center mb-2">
+                                            <a href="javascript:void()" class="btn btn-primary">Load More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="about-me" class="tab-pane fade">
+                                    @if (_aboutMe == null)
+                                    {
+                                        <Loader />
+                                    }
+                                    else
+                                    {
+                                        <div class="profile-about-me">
+                                            <div class="pt-4 border-bottom-1 pb-3">
+                                                <h4 class="text-primary">About Me</h4>
+                                                <p class="mb-2">@_aboutMe.BasicInfo.TellAboutYou</p>
+                                                @*<p>A collection of textile samples lay spread out on the table - Samsa was a travelling salesman - and above it there hung a picture that he had recently cut out of an illustrated magazine and housed in a nice, gilded frame.</p>*@
+                                            </div>
+                                        </div>
+                                        <div class="profile-skills mb-5">
+                                            <h4 class="text-primary mb-2">Skills</h4>
+                                            @foreach (var item in _aboutMe.Skills)
+                                            {
+                                                <a href="javascript:void()" class="btn btn-primary light btn-xs mb-1">@item.Name</a>
+                                            }
+                                            @*<a href="javascript:void()" class="btn btn-primary light btn-xs mb-1">Dashboard</a>
+                                                <a href="javascript:void()" class="btn btn-primary light btn-xs mb-1">Photoshop</a>
+                                                <a href="javascript:void()" class="btn btn-primary light btn-xs mb-1">Bootstrap</a>
+                                                <a href="javascript:void()" class="btn btn-primary light btn-xs mb-1">Responsive</a>
+                                                <a href="javascript:void()" class="btn btn-primary light btn-xs mb-1">Crypto</a>*@
+                                        </div>
+                                        <div class="profile-lang  mb-5">
+                                            @if (_aboutMe.Languages == null)
+                                            {
+                                                <MiniLoader />
+                                            }
+                                            else if (_aboutMe.Languages.Count != 0)
+                                            {
+                                                <h4 class="text-primary mb-2">Language</h4>
+                                                @foreach (var item in _aboutMe.Languages)
+                                                {
+                                                    <a href="javascript:void()" class="text-muted pr-3 f-s-16"><i class="flag-icon flag-icon-us"></i> @item.LangaugeName</a>
+                                                }
+                                            }
+                                            @*<a href="javascript:void()" class="text-muted pr-3 f-s-16"><i class="flag-icon flag-icon-fr"></i> French</a>
+                                                <a href="javascript:void()" class="text-muted pr-3 f-s-16"><i class="flag-icon flag-icon-bd"></i> Bangla</a>*@
+                                        </div>
+                                        <div class="profile-personal-info">
+                                            <h4 class="text-primary mb-4">Personal Information</h4>
+                                            <div class="row mb-2">
+                                                <div class="col-3">
+                                                    <h5 class="f-w-500">
+                                                        Name<span class="pull-right">:</span>
+                                                    </h5>
+                                                </div>
+                                                <div class="col-9">
+                                                    <span>@_aboutMe.BasicInfo.FullName</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-3">
+                                                    <h5 class="f-w-500">
+                                                        Email <span class="pull-right">:</span>
+                                                    </h5>
+                                                </div>
+                                                <div class="col-9">
+                                                    <span>@_aboutMe.BasicInfo.Email</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-3">
+                                                    <h5 class="f-w-500">Availability <span class="pull-right">:</span></h5>
+                                                </div>
+                                                <div class="col-9">
+                                                    <span>Full Time</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-3">
+                                                    <h5 class="f-w-500">
+                                                        Age <span class="pull-right">:</span>
+                                                    </h5>
+                                                </div>
+                                                <div class="col-9">
+                                                    <span>@(DateTime.Today.Year- _aboutMe.BasicInfo.DOB.Year)</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-3">
+                                                    <h5 class="f-w-500">Location <span class="pull-right">:</span></h5>
+                                                </div>
+                                                <div class="col-9">
+                                                    <span>
+                                                        @_aboutMe.BasicInfo.Address, @_aboutMe.BasicInfo.StateName
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-3">
+                                                    <h5 class="f-w-500">Year Experience <span class="pull-right">:</span></h5>
+                                                </div>
+                                                <div class="col-9">
+                                                    <span>@_aboutMe.YearsOfExperience Year Experiences</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <AuthorizeView Roles="Gym,Trainer">
+                                    <Authorized>
+                                        @if (_isOwner)
+                                        {
+                                            <div id="profile-settings" class="tab-pane fade">
+                                                <div class="pt-3">
+                                                    <div class="settings-form">
+                                                        <h4 class="text-primary">Account Setting</h4>
+                                                        <form>
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label>Email</label>
+                                                                    <input type="email" placeholder="Email" class="form-control">
+                                                                </div>
+                                                                <div class="form-group col-md-6">
+                                                                    <label>Password</label>
+                                                                    <input type="password" placeholder="Password" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Address</label>
+                                                                <input type="text" placeholder="1234 Main St" class="form-control">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Address 2</label>
+                                                                <input type="text" placeholder="Apartment, studio, or floor" class="form-control">
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label>City</label>
+                                                                    <input type="text" class="form-control">
+                                                                </div>
+                                                                <div class="form-group col-md-4">
+                                                                    <label>State</label>
+                                                                    <select class="form-control" id="inputState">
+                                                                        <option selected="">Choose...</option>
+                                                                        <option>Option 1</option>
+                                                                        <option>Option 2</option>
+                                                                        <option>Option 3</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label>Zip</label>
+                                                                    <input type="text" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" class="custom-control-input" id="gridCheck">
+                                                                    <label class="custom-control-label" for="gridCheck"> Check me out</label>
+                                                                </div>
+                                                            </div>
+                                                            <button class="btn btn-primary" type="submit">
+                                                                Sign
+                                                                in
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </Authorized>
+                                </AuthorizeView>
+                                <div id="profile-Offers" class="tab-pane fade">
+                                    <div class="card">
+                                        <div class="card-body p-0 pt-1">
+                                            <div class="pt-1 border-bottom-1 pb-3">
+                                                <MatH5 Class="text-primary" Style="font-weight:400">
+                                                    @(_role.Equals("Gym") ? "Offers" : _role.Equals("Trainer") ? "Courses" :  @"N\A")
+                                                </MatH5>
+                                            </div>
+                                            @if (_subscriptions == null)
+                                            {
+                                                <Loader />
+                                            }
+                                            else if (_subscriptions.Count == 0)
+                                            {
+                                                <MatH6 Style="font-weight:400">@_profile.FullName not offering anything yet.</MatH6>
+                                            }
+                                            else
+                                            {
+                                                <div class="row p-0">
+                                                    @foreach (var item in _subscriptions)
+                                                    {
+                                                        <div class="col-md-6 col-sm-12 px-1 @_class">
+                                                            <div class="card custom-card">
+                                                                <div class="card-header">
+                                                                    <MatH6 Style="font-weight:400">@item.Name</MatH6>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <img src="@(string.IsNullOrEmpty(item.Picture) ? "Images/12.jpg" : item.Picture)" class="img-fluid" alt="Image">
+
+                                                                    <p class="text-primary mb-2 mt-3 pl-1"><strong>Price:</strong> @string.Format(new CultureInfo("ar-SA"), "{0:C2}", item.Price)</p>
+                                                                    <p class="text-primary pl-1 m-0">Details</p>
+                                                                    <p class="card-text pl-1 text-start">@(item.Detail ?? "N/A")</p>
+                                                                </div>
+                                                                <div class="card-footer mt-1">
+                                                                    @item.SubscriptionMonths Months
+                                                                </div>
+                                                            </div>
+                                                            @if (!_isOwner)
+                                                            {
+                                                                <div class="w-100 text-center subscribe">
+                                                                    <button type="button" @onclick="@(()=>Subscribe(item))"
+                                                                            class="btn btn-outline-primary">
+                                                                        Subscribe
+                                                                    </button>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                            @*<p class="mb-1">@item.FullName</p>
+                                                        <h4 class="fs-20 text-black">@item.Title</h4>
+                                                    </div>
+                                                    <img src="@item.Picture" class="img-responsive" width="60" height="60" viewBox="0 0 60 60" fill="none" />
+                                                </div>
+                                                <span class="text-primary font-w500 d-block mb-3">$@item.MinPrice - $@item.MaxPrice</span>
+                                                <p class="fs-14">@item.Description</p>
+                                                <div class="d-flex align-items-center mt-4">
+                                                    <a href="@($"Profile/{item.Id}")" class="btn btn-primary light btn-rounded mr-auto">View Mores</a>
+                                                    <span class="text-black font-w500">@item.City, @item.Country</span>*@
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="imageUploadModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload @(_isCover ? "Cover" : _isProfile ? "Profile" : "Create Post")</h5>
+                <button type="button" @onclick="@(()=>DeleteFile(false))" class="btn btn-close bg-transparent p-0" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times-circle"></i></button>
+            </div>
+            <EditForm Model="_postUpload" Context="chs" enctype="multipart/form-data"
+                      OnValidSubmit="HandleValidSubmit">
+                <div class="modal-body pb-0 pt-1">
+                    <div class="post-input">
+                        @if (!_isProfile && !_isCover)
+                        {
+                            <MatTextField @bind-Value="_postUpload.Text" Label="@_label"
+                                          Style="background-color:#fafafa !important" rows="6"
+                                          TextArea="false" Class="bg-transparent"
+                                          @onfocusin="@(() => { _label = string.Empty; })"
+                                          @onfocusout="@(() => { _label = "Say Something..."; })"
+                                          PlaceHolder="Please type what you want....">
+                                @*<MatIconButton OnClick="EmojiPicker" Icon="@MatIconNames.Insert_emoticon"></MatIconButton>*@
+                            </MatTextField>
+                        }
+                        @*@if (_showEmoji)
+                            {
+                                <div style="position:absolute;top:3rem;z-index:99900">
+                                    <emoji-picker onclick="EmojiPicker()"></emoji-picker>
+                                </div>
+                            }*@
+                        @if (_processing)
+                        {
+                            <MatProgressBar Class="my-2" Progress="0.35" Buffer="0.7"></MatProgressBar>
+                        }
+                        else
+                        {
+                            <div style="max-height:700px; overflow-y:scroll" class="@(!_isProfile && !_isCover ? "" : "mt-3")">
+                                <figure class="figure d-block" style="position:relative;height:300px">
+                                    <div class="hover-links">
+
+                                        <!--<div class="d-inline-block mx-1">
+                                            <button type="button" onclick="imageUpload('file-upload')" title="Change File" class="btn btn-primary light px-3"><i class="fa fa-link"></i></button>-->
+                                        @*<InputFile @bind-Value="_postUpload.File" OnChange="OnChangeFile" id="file-upload" accept="application/pdf,application/vnd.ms-excel" hidden></InputFile>*@
+                                        <!--</div>-->
+                                        @if (!_isProfile || _isCover)
+                                        {
+                                            <div class="d-inline-block mx-1">
+                                                <button type="button" onclick="imageUpload('@(_isCover ? "cover" : _isProfile ? "profile": "image")-upload')" title="Change File" class="btn btn-primary light mr-1 px-3"><i class="fa fa-camera"></i></button>
+                                                <InputFile id="image-upload" OnChange="OnChangePostImage" accept="image/*" hidden></InputFile>
+                                            </div>
+                                        }
+                                        <div class="d-inline-block mx-1 float-right">
+                                            <button type="button" data-bs-dismiss="modal" @onclick="@(()=>DeleteFile(false))" title="Clear" class="btn text-secondary p-0"><i class="far fa-times-circle fa-2x"></i></button>
+                                        </div>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(_imgSrc))
+                                    {
+                                        <img src="@_imgSrc.Split(Constant.WwwRoot)[1]" style="@(_isProfile ? "margin : 4.5rem 0 0 7.0rem" : "")" class="text-center figure-img img-fluid rounded" alt="Image">
+                                        @*<h4>@_imgSrc.Split(Constant.WwwRoot)[1] </h4>
+                                            <h3>@WebHostEnvironment.WebRootPath</h3>
+                                            <h3>@WebHostEnvironment.ContentRootPath</h3>*@
+                                    }
+                                </figure>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" @onclick="@(()=>DeleteFile(false))" class="btn btn-secondary" id="ClickCancel" data-bs-dismiss="modal">Cancel</button>
+                    @if (_isProfile || _isCover)
+                    {
+
+                        <button type="button" @onclick="Done" class="btn btn-primary">Done</button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-primary">Post</button>
+                    }
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+

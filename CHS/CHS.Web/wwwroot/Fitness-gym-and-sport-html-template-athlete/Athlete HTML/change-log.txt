@@ -1,0 +1,19 @@
+Version 1.0.0 (31.1.2015)
+
+- Initial Release
+
+Version 1.0.1 (25.2.2015)
+
+ - Missing images fixed
+
+Version 1.1 (28.3.2015)
+
+ - Athlete Store homepage added
+ - Athlete sport club homepage added
+
+Version 1.1.2 (13.05.2015)
+ - Fixed: Background resizing
+ - Fixed: 404 not found
+ - Fixed: Google map api error
+
+  
